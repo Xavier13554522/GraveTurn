@@ -1,5 +1,6 @@
 package src;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.*;
@@ -8,11 +9,60 @@ class PanelGameplay extends JPanel {
     public PanelGameplay(Player player, Enemy enemy) {
         this.setBackground(Color.WHITE);
         this.setPreferredSize(new Dimension(520, 220));
+        this.setLayout(new BorderLayout());
+
+        ContainerText containerText = new ContainerText(player, enemy);
+        ContainerCharacters containerCharacters = new ContainerCharacters(player, enemy);
+        containerCharacters.setOpaque(false);
+        containerText.setOpaque(false);
+
+        BackgroundPanel backgroundPanel = new BackgroundPanel();
+        backgroundPanel.setLayout(new BorderLayout());
+        backgroundPanel.add(containerText, BorderLayout.NORTH);
+        backgroundPanel.add(containerCharacters, BorderLayout.CENTER);
+
+        this.add(backgroundPanel, BorderLayout.CENTER);
+    }
+}
+
+class ContainerText extends JPanel {
+    JLabel labelPlayerHealth;
+    JLabel labelEnemyHealth;
+
+    public ContainerText(Player player, Enemy enemy) {
+        this.setOpaque(false);
+        this.setPreferredSize(new Dimension(520, 30));
+        this.setLayout(new GridLayout(1, 2, 20, 0));
+        this.labelPlayerHealth = new JLabel("Vida: " + player.getHealth(), JLabel.CENTER);
+        this.labelEnemyHealth = new JLabel("Vida: " + enemy.getHealth(), JLabel.CENTER);
+        labelPlayerHealth.setForeground(Color.BLACK);
+        labelEnemyHealth.setForeground(Color.RED);
+        labelPlayerHealth.setFont(new Font("Arial", Font.BOLD, 16));
+        labelEnemyHealth.setFont(new Font("Arial", Font.BOLD, 16));
+
+        Timer timer = new Timer(100, e -> {
+            labelPlayerHealth.setText("Vida: " + player.getHealth());
+            labelEnemyHealth.setText("Vida: " + enemy.getHealth());
+        });
+        timer.start();
+        this.add(labelPlayerHealth);
+        this.add(labelEnemyHealth);
+    }
+}
+
+class ContainerCharacters extends JPanel {
+    Frame frame;
+    Frame frameEnemy;
+
+    public ContainerCharacters(Player player, Enemy enemy) {
+        this.setOpaque(false);
+        this.setPreferredSize(new Dimension(520, 190));
         this.setLayout(new GridLayout(1, 2, 20, 10));
 
-        Frame frame = new Frame(player);
+        frame = new Frame(player);
+        frameEnemy = new Frame(enemy);
+
         this.add(frame);
-        Frame frameEnemy = new Frame(enemy);
         this.add(frameEnemy);
 
         Timer timer = new Timer(100, e -> {
@@ -23,6 +73,7 @@ class PanelGameplay extends JPanel {
         });
         timer.start();
     }
+
 }
 
 class Frame extends JPanel {
@@ -38,8 +89,7 @@ class Frame extends JPanel {
         this.frameHeight = (currentFrame != null ? currentFrame.getHeight(null) : 0) * 2;
 
         this.setPreferredSize(new Dimension(Math.max(frameWidth, 1), Math.max(frameHeight, 1)));
-        this.setBackground(Color.WHITE);
-        this.setOpaque(true);
+        this.setOpaque(false);
     }
 
     @Override

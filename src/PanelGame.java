@@ -24,7 +24,7 @@ public class PanelGame extends JPanel {
                 gbc.insets = new Insets(0, 0, 20, 0);
                 this.add(panelActions, gbc);
 
-                Button buttonBack = new Button("Volver al menú");
+                Button buttonBack = new Button("Volver al menú", null);
                 buttonBack.addActionListener(e -> createWindow.showPanel("Home"));
 
                 gbc.gridx = 0;
