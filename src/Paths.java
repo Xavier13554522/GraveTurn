@@ -4,7 +4,7 @@ public class Paths {
     //RAIZ
     public static final String ASSETS = "assets/";
     public static final String SPRITES = ASSETS + "sprites/";
-    public static final String BACKGROUND = ASSETS + "backgrounds/";
+    public static final String BACKGROUND = ASSETS + "background/";
     public static final String ITEMS = ASSETS + "items/";
     //SPRITES
     public static final String PLAYER = SPRITES + "characters/";
@@ -16,7 +16,7 @@ public class Paths {
     
     //THAT'S FUNCTIONS ARE USED TO SELECT THE PATH OF THE ASSETS
     public static String SelectBackground (String backgroundName){
-        return BACKGROUND + backgroundName + "/";
+        return BACKGROUND + backgroundName;
     }
     public static String SelectCharacter (String characterName){
         return PLAYER + characterName + "/";

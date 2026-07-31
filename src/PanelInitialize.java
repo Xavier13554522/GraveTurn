@@ -1,10 +1,8 @@
 package src;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import java.awt.*;
 import javax.swing.ImageIcon;
 
@@ -12,18 +10,19 @@ public class PanelInitialize extends JPanel {
 
     public PanelInitialize(CreateWindow createWindow) {
         this.setBackground(Color.BLACK);
-        this.setLayout(new GridBagLayout());
-
+        this.setLayout(new BorderLayout());
+        BackgroundPanel bg = new BackgroundPanel("midnight.png", 640, 480);
+        bg.setLayout(new GridBagLayout());
         // Objeto para dar las instrucciones de posición
         GridBagConstraints gbc = new GridBagConstraints();
 
         // 1. CONFIGURACIÓN DEL LABEL (Fila 0)
-        Label label = new Label("Juegazo");
+        Label label = new Label("Grave Turn");
         gbc.gridx = 0; // Columna 0
         gbc.gridy = 0; // Fila 0 (Arriba)
         gbc.insets = new Insets(0, 0, 20, 0);
 
-        this.add(label, gbc);
+        bg.add(label, gbc);
 
         // 2. CONFIGURACIÓN DEL BOTÓN (Fila 1)
         Button button = new Button("Play", null);
@@ -36,7 +35,7 @@ public class PanelInitialize extends JPanel {
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 20, 0);
 
-        this.add(button, gbc);
+        bg.add(button, gbc);
 
         // 3. CONFIGURACIÓN DEL PANEL (Fila 2)
         Button buttonExit = new Button("Exit", null);
@@ -51,7 +50,8 @@ public class PanelInitialize extends JPanel {
         gbc.gridy = 3;
         gbc.insets = new Insets(0, 0, 20, 0);
 
-        this.add(buttonExit, gbc);
+        bg.add(buttonExit, gbc);
+        this.add(bg,BorderLayout.CENTER);
     }
 }
 

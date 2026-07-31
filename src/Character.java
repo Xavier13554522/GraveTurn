@@ -4,7 +4,7 @@ import java.awt.Image;
 
 public class Character {
     public enum State {
-        IDLE, ATTACK, HURT, DEAD
+        IDLE, ATTACK, HURT, DEAD, DODGE
     }
 
     private String name;
@@ -24,13 +24,23 @@ public class Character {
     }
 
     public void receiveDamage(int damage) {
-        this.health -= damage;
-        setState(State.HURT);
+        if (this.health > 0) {
+            this.health -= damage;
+            setState(State.HURT);
+        }
+        if (this.health <= 0) {
+            setState(State.DEAD);
+        }
     }
 
     public void attack(Character target) {
-        target.receiveDamage(this.damage);
-        setState(State.DEAD);
+        if (target.health > 0 && this.health > 0) {
+            target.receiveDamage(this.damage);
+            setState(State.ATTACK);
+        }
+        if (target.health <= 0) {
+            setState(State.IDLE);
+        }
     }
 
     public void heal(int amount) {
@@ -80,13 +90,11 @@ public class Character {
         if (state == State.HURT && animator.getCompleted().getOrDefault(State.HURT, false)) {
             setState(State.IDLE);
         }
-        if (state == State.DEAD && animator.getCompleted().getOrDefault(State.DEAD, false)) {
-            setState(State.IDLE);
-        }
         if (state == State.ATTACK && animator.getCompleted().getOrDefault(State.ATTACK, false)) {
             setState(State.IDLE);
         }
     }
+
     public Image getCurrentFrame() {
         if (animator == null)
             return null;

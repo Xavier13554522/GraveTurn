@@ -16,7 +16,7 @@ class PanelGameplay extends JPanel {
         containerCharacters.setOpaque(false);
         containerText.setOpaque(false);
 
-        BackgroundPanel backgroundPanel = new BackgroundPanel();
+        BackgroundPanel backgroundPanel = new BackgroundPanel("midnight.png",520,220);
         backgroundPanel.setLayout(new BorderLayout());
         backgroundPanel.add(containerText, BorderLayout.NORTH);
         backgroundPanel.add(containerCharacters, BorderLayout.CENTER);
