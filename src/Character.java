@@ -4,23 +4,25 @@ import java.awt.Image;
 
 public class Character {
     public enum State {
-        IDLE, ATTACK, HURT, DEAD, DODGE
+        IDLE, ATTACK, HURT, DEAD, DODGE, HEAL
     }
 
     private String name;
     private String description;
     private int health;
     private int damage;
+    private int potion;
 
     private Animator<State> animator;
     private State state = State.IDLE;
 
-    Character(String name, String description, int health, int damage, Animator<State> animator) {
+    Character(String name, String description, int health, int damage, int potion, Animator<State> animator) {
         this.name = name;
         this.description = description;
         this.health = health;
         this.damage = damage;
         this.animator = animator;
+        this.potion = potion;
     }
 
     public void receiveDamage(int damage) {
@@ -43,8 +45,19 @@ public class Character {
         }
     }
 
-    public void heal(int amount) {
-        this.health += amount;
+    public void heal() {
+        if (this.potion > 0) {
+            this.health += 20; // Valor de curación, puedes ajustarlo según sea necesario
+            this.potion--;
+        }
+    }
+
+    public void Dodge() {
+        setState(State.DODGE);
+    }
+
+    public int getPotion() {
+        return potion;
     }
 
     public String getName() {
@@ -91,6 +104,9 @@ public class Character {
             setState(State.IDLE);
         }
         if (state == State.ATTACK && animator.getCompleted().getOrDefault(State.ATTACK, false)) {
+            setState(State.IDLE);
+        }
+        if (state == State.DODGE && animator.getCompleted().getOrDefault(State.DODGE, false)) {
             setState(State.IDLE);
         }
     }
