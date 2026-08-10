@@ -8,7 +8,7 @@ public class CreateWindow extends JFrame {
     private JPanel container = new JPanel(containerCards);
     
     public CreateWindow() {
-        this.setTitle("CAMINO A LA LOCURA");
+        this.setTitle("Grave Turn-based Game");
         this.setSize(640, 480);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null); // Center the window
@@ -26,6 +26,10 @@ public class CreateWindow extends JFrame {
         } else if (name.equals("Game")) {
             PanelGame panelGame = new PanelGame(this);
             container.add(panelGame, "Game");
+        }
+        else if (name.equals("GameOver")) {
+            PanelGameOver panelGameOver = new PanelGameOver(this, "Player");
+            container.add(panelGameOver, "GameOver");
         }
         containerCards.show(container, name);
     }

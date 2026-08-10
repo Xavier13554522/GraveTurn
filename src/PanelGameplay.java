@@ -6,7 +6,7 @@ import javax.swing.Timer;
 import java.awt.*;
 
 class PanelGameplay extends JPanel {
-    public PanelGameplay(Player player, Enemy enemy) {
+    public PanelGameplay(Player player, Enemy enemy, GameManager gameManager) {
         this.setBackground(Color.WHITE);
         this.setPreferredSize(new Dimension(520, 220));
         this.setLayout(new BorderLayout());
@@ -15,30 +15,38 @@ class PanelGameplay extends JPanel {
         ContainerCharacters containerCharacters = new ContainerCharacters(player, enemy);
         containerCharacters.setOpaque(false);
         containerText.setOpaque(false);
+        //
+        JPanel container = new JPanel();
+        container.setLayout(new BorderLayout());
+        container.setOpaque(false);
+        LabelsComponents labelTurn = new LabelsComponents("Turno: " + (gameManager.isPlayerTurn() ? "Jugador" : "Enemigo"));
+        container.add(labelTurn, BorderLayout.CENTER);
 
-        BackgroundPanel backgroundPanel = new BackgroundPanel("midnight.png",520,220);
+        Timer timer = new Timer(100, e -> {
+            labelTurn.setText("Turno: " + (gameManager.isPlayerTurn() ? "Jugador" : "Enemigo"));
+        });
+        timer.start();
+        //
+        BackgroundPanel backgroundPanel = new BackgroundPanel("midnight.png", 520, 220);
         backgroundPanel.setLayout(new BorderLayout());
         backgroundPanel.add(containerText, BorderLayout.NORTH);
         backgroundPanel.add(containerCharacters, BorderLayout.CENTER);
+        backgroundPanel.add(container, BorderLayout.SOUTH);
 
         this.add(backgroundPanel, BorderLayout.CENTER);
     }
 }
 
 class ContainerText extends JPanel {
-    JLabel labelPlayerHealth;
-    JLabel labelEnemyHealth;
+    LabelsComponents labelPlayerHealth;
+    LabelsComponents labelEnemyHealth;
 
     public ContainerText(Player player, Enemy enemy) {
         this.setOpaque(false);
         this.setPreferredSize(new Dimension(520, 30));
         this.setLayout(new GridLayout(1, 2, 20, 0));
-        this.labelPlayerHealth = new JLabel("Vida: " + player.getHealth(), JLabel.CENTER);
-        this.labelEnemyHealth = new JLabel("Vida: " + enemy.getHealth(), JLabel.CENTER);
-        labelPlayerHealth.setForeground(Color.BLACK);
-        labelEnemyHealth.setForeground(Color.RED);
-        labelPlayerHealth.setFont(new Font("Arial", Font.BOLD, 16));
-        labelEnemyHealth.setFont(new Font("Arial", Font.BOLD, 16));
+        this.labelPlayerHealth = new LabelsComponents("Vida: " + player.getHealth());
+        this.labelEnemyHealth = new LabelsComponents("Vida: " + enemy.getHealth());
 
         Timer timer = new Timer(100, e -> {
             labelPlayerHealth.setText("Vida: " + player.getHealth());
@@ -74,6 +82,14 @@ class ContainerCharacters extends JPanel {
         timer.start();
     }
 
+}
+
+class LabelsComponents extends JLabel {
+    public LabelsComponents(String text) {
+        super(text, JLabel.CENTER);
+        this.setForeground(Color.WHITE);
+        this.setFont(new Font("Arial", Font.BOLD, 16));
+    }
 }
 
 class Frame extends JPanel {
