@@ -7,7 +7,7 @@ public class PanelGame extends JPanel {
         public PanelGame(CreateWindow createWindow) {
                 this.setBackground(Color.DARK_GRAY);
                 this.setLayout(new GridBagLayout());
-
+                AudioManager.getInstance().playBackgroundMusic("music-fight");
                 GameManager gameManager = new GameManager(createWindow);
                 Player player = InitializePlayer.initializePlayer("Black-Hat");
                 Enemy enemy = InitializeEnemy.initializeEnemy("Black-Hat");

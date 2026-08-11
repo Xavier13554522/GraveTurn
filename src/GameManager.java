@@ -56,6 +56,7 @@ class GameManager {
 
     public void checkGameOver() {
         if (gameOver) {
+            AudioManager.getInstance().playEffect("dead");
             createWindow.showPanel("GameOver");
         }
     }

@@ -6,6 +6,7 @@ public class Paths {
     public static final String SPRITES = ASSETS + "sprites/";
     public static final String BACKGROUND = ASSETS + "background/";
     public static final String ITEMS = ASSETS + "items/";
+    public static final String SOUNDS = ASSETS + "sounds/";
     //SPRITES
     public static final String PLAYER = SPRITES + "characters/";
     public static final String ENEMIES = SPRITES + "enemies/";

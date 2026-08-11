@@ -10,7 +10,6 @@ class PanelGameplay extends JPanel {
         this.setBackground(Color.WHITE);
         this.setPreferredSize(new Dimension(520, 220));
         this.setLayout(new BorderLayout());
-
         ContainerText containerText = new ContainerText(player, enemy);
         ContainerCharacters containerCharacters = new ContainerCharacters(player, enemy);
         containerCharacters.setOpaque(false);

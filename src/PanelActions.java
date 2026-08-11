@@ -34,10 +34,13 @@ class ActionsContainer extends JPanel {
         bg.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        attackButton = createActionButton(bg, gbc, 0, Paths.SelectSword("1.png"), () -> player.attack(enemy), null);
+        attackButton = createActionButton(bg, gbc, 0, Paths.SelectSword("1.png"),
+                () -> {
+                    player.attack(enemy);
+                    AudioManager.getInstance().playEffect("attack");
+                }, null);
         dodgeButton = createActionButton(bg, gbc, 1, Paths.SelectShield("1.png"), null, () -> player.Dodge());
-        healButton = createActionButton(bg, gbc, 2, Paths.SelectPotion("1.png"), () -> player.heal(), null);
-
+        healButton = createActionButton(bg, gbc, 2, Paths.SelectPotion("1") + "3.png", () -> player.heal(), null);
         updateButtonsState();
         this.add(bg, BorderLayout.CENTER);
     }
@@ -76,6 +79,14 @@ class ActionsContainer extends JPanel {
         attackButton.setEnabled(playerTurn && !isWinner);
         dodgeButton.setEnabled(playerTurn && !isWinner);
         healButton.setEnabled(playerTurn && playersPotions && !isWinner);
+
+        if (player.getPotion() >= 3) {
+            healButton.setIcon(Paths.SelectPotion("1") + "3.png");
+        } else if (player.getPotion() == 2) {
+            healButton.setIcon(Paths.SelectPotion("1") + "2.png");
+        } else {
+            healButton.setIcon(Paths.SelectPotion("1") + "1.png");
+        }
 
         attackButton.revalidate();
         attackButton.repaint();

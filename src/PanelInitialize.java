@@ -11,6 +11,7 @@ public class PanelInitialize extends JPanel {
     public PanelInitialize(CreateWindow createWindow) {
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
+        AudioManager.getInstance().playBackgroundMusic("background");
         BackgroundPanel bg = new BackgroundPanel("midnight.png", 640, 480);
         bg.setLayout(new GridBagLayout());
         // Objeto para dar las instrucciones de posición
@@ -28,6 +29,7 @@ public class PanelInitialize extends JPanel {
         Button button = new Button("Play", null);
 
         button.addActionListener(e -> {
+            AudioManager.getInstance().stopMusic();
             createWindow.showPanel("Game");
         });
 
@@ -68,6 +70,16 @@ class Button extends JButton {
         }
         this.setForeground(Color.WHITE);
         this.setFocusable(false);
+    }
+
+    public void setIcon(String pathImage) {
+        if (pathImage != null && !pathImage.isEmpty()) {
+            ImageIcon icon = new ImageIcon(pathImage);
+            Image scaledImage = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+            this.setIcon(new ImageIcon(scaledImage));
+        } else {
+            this.setIcon((javax.swing.Icon) null);
+        }
     }
 }
 

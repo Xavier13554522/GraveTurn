@@ -47,6 +47,7 @@ public class Character {
 
     public void heal() {
         if (this.potion > 0) {
+            AudioManager.getInstance().playEffect("heal.wav");
             this.health += 20; // Valor de curación, puedes ajustarlo según sea necesario
             this.potion--;
         }
