@@ -22,7 +22,7 @@ public class PanelGame extends JPanel {
                 PanelActions panelActions = new PanelActions(player, enemy, gameManager);
                 gbc.gridx = 0;
                 gbc.gridy = 1;
-                gbc.insets = new Insets(0, 0, 20, 0);
+                gbc.insets = new Insets(0, 0, 0, 0);
                 this.add(panelActions, gbc);
         }
 }

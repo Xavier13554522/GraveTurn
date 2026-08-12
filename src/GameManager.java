@@ -1,5 +1,5 @@
 package src;
-
+import javax.swing.*;
 class GameManager {
     private boolean playerTurn = true;
     private boolean gameOver = false;
@@ -14,6 +14,7 @@ class GameManager {
         this.winner = null;
         this.createWindow = createWindow;
     }
+
     public boolean isPlayerTurn() {
         return playerTurn;
     }
@@ -57,7 +58,12 @@ class GameManager {
     public void checkGameOver() {
         if (gameOver) {
             AudioManager.getInstance().playEffect("dead");
-            createWindow.showPanel("GameOver");
+            createWindow.setPanel(new PanelGameOver(createWindow, this, winner), "GameOver");
+            Timer timer = new Timer(2000, e -> {
+                createWindow.showPanel("GameOver");
+            });
+            timer.setRepeats(false);
+            timer.start();
         }
     }
 }

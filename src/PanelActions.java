@@ -7,7 +7,7 @@ class PanelActions extends JPanel {
 
     public PanelActions(Player player, Enemy enemy, GameManager gameManager) {
         this.setBackground(Color.LIGHT_GRAY);
-        this.setPreferredSize(new Dimension(520, 100));
+        this.setPreferredSize(new Dimension(640, 180));
         this.setLayout(new BorderLayout());
         ActionsContainer actionsContainer = new ActionsContainer(player, enemy, gameManager);
         this.add(actionsContainer, BorderLayout.CENTER);
@@ -29,7 +29,7 @@ class ActionsContainer extends JPanel {
         this.setOpaque(false);
         this.gameManager = gameManager;
 
-        BackgroundPanel bg = new BackgroundPanel("action-table.png", 520, 100);
+        BackgroundPanel bg = new BackgroundPanel("action-table.png", 640, 180);
         bg.setLayout(new GridBagLayout());
         bg.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
