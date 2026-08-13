@@ -7,26 +7,25 @@ import src.Character.State;
 public class Delay {
     static public void executeDelayCode(Enemy enemy, Player player, GameManager gameManager, Runnable onTurnFinished,
             Runnable actionRunnable) {
+        Inteligence intelligence = new Inteligence(player, enemy);
+        String actionEnemy = intelligence.decideAction();
+        actionConditionAttack(actionEnemy, enemy, player, onTurnFinished, intelligence);
         Timer timer = new Timer(1000, e -> {
             if (gameManager.getGameOver()) {
                 return;
             }
-            executeCode(enemy, player, gameManager, onTurnFinished, actionRunnable);
+            executeCode(enemy, player, gameManager, onTurnFinished, actionRunnable, intelligence, actionEnemy);
         });
         timer.setRepeats(false);
         timer.start();
     }
 
     public static void executeCode(Enemy enemy, Player player, GameManager gameManager, Runnable onTurnFinished,
-            Runnable actionRunnable) {
-        if (actionRunnable != null) {
-            enemy.setState(State.ATTACK);
-            AudioManager.getInstance().playEffect("attack");
-            actionRunnable.run();
-            AudioManager.getInstance().playEffect("dodge");
+            Runnable actionRunnable, Inteligence intelligence, String actionEnemy) {
+        if (player.getLastAction() != null && player.getLastAction().equals("dodge")) {
+            dodgePlayerAction(actionRunnable, enemy, player, intelligence);
         } else {
-            enemy.attack(player);
-            AudioManager.getInstance().playEffect("attack");
+            actionDecided(actionEnemy, enemy, player);
         }
         Timer timer = new Timer(1000, e2 -> {
             if (gameManager.getGameOver()) {
@@ -37,5 +36,59 @@ public class Delay {
         });
         timer.setRepeats(false);
         timer.start();
+    }
+
+    private static void actionConditionAttack(String actionEnemy, Enemy enemy, Player player, Runnable onTurnFinished,
+            Inteligence intelligence) {
+        System.out.println("Player last action: " + player.getLastAction());
+        if (player.getLastAction() != null && player.getLastAction().equals("attack") && !actionEnemy.equals("dodge")) {
+            player.attack(enemy);
+            AudioManager.getInstance().playEffect("attack");
+        }
+        else if (player.getLastAction() != null && player.getLastAction().equals("attack") && actionEnemy.equals("dodge")) {
+            dodgeEnemyAction(enemy, player, intelligence);
+            onTurnFinished.run();
+            return;
+        }
+    }
+
+    private static void dodgePlayerAction(Runnable actionRunnable, Enemy enemy, Player player,
+            Inteligence intelligence) {
+        if (intelligence.isDodgeAttack()) {
+            if (actionRunnable != null) {
+                enemy.setState(State.ATTACK);
+                AudioManager.getInstance().playEffect("attack");
+                actionRunnable.run();
+                AudioManager.getInstance().playEffect("dodge");
+            }
+        } else {
+            enemy.setState(State.ATTACK);
+            player.receiveDamage(player.getDamage() / 2);
+            AudioManager.getInstance().playEffect("attack");
+        }
+    }
+
+    private static void dodgeEnemyAction(Enemy enemy, Player player,
+            Inteligence intelligence) {
+        System.out.println("Player last action: " + player.getLastAction());
+        if (intelligence.isDodgeAttack()) {
+            player.setState(State.ATTACK);
+            enemy.Dodge();
+            AudioManager.getInstance().playEffect("dodge");
+        } else {
+            player.setState(State.ATTACK);
+            enemy.receiveDamage(enemy.getDamage() / 2);
+            AudioManager.getInstance().playEffect("attack");
+        }
+    }
+
+    private static void actionDecided(String actionEnemy, Enemy enemy, Player player) {
+        if (actionEnemy.equals("attack")) {
+            enemy.attack(player);
+            AudioManager.getInstance().playEffect("attack");
+        } else if (actionEnemy.equals("heal")) {
+            enemy.heal();
+            AudioManager.getInstance().playEffect("heal");
+        }
     }
 }

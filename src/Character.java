@@ -13,6 +13,9 @@ public class Character {
     private int damage;
     private int potion;
 
+    private String lastAction = null;
+
+    private int accDamage, accPotion, accDodge, accReceiveDamage, dodgeChance;
     private Animator<State> animator;
     private State state = State.IDLE;
 
@@ -23,12 +26,14 @@ public class Character {
         this.damage = damage;
         this.animator = animator;
         this.potion = potion;
+        this.dodgeChance = 50;
     }
 
     public void receiveDamage(int damage) {
         if (this.health > 0) {
             this.health -= damage;
             setState(State.HURT);
+            accReceiveDamage += damage;
         }
         if (this.health <= 0) {
             setState(State.DEAD);
@@ -39,6 +44,8 @@ public class Character {
         if (target.health > 0 && this.health > 0) {
             target.receiveDamage(this.damage);
             setState(State.ATTACK);
+            accDamage += this.damage;
+            lastAction = "attack";
         }
         if (target.health <= 0) {
             setState(State.IDLE);
@@ -50,11 +57,16 @@ public class Character {
             AudioManager.getInstance().playEffect("heal.wav");
             this.health += 20; // Valor de curación, puedes ajustarlo según sea necesario
             this.potion--;
+            setState(State.HEAL);
+            accPotion++;
+            lastAction = "heal";
         }
     }
 
     public void Dodge() {
         setState(State.DODGE);
+        accDodge++;
+        lastAction = "dodge";
     }
 
     public int getPotion() {
@@ -75,6 +87,34 @@ public class Character {
 
     public int getDamage() {
         return damage;
+    }
+
+    public int getAccDamage() {
+        return accDamage;
+    }
+
+    public int getAccPotion() {
+        return accPotion;
+    }
+
+    public int getAccDodge() {
+        return accDodge;
+    }
+
+    public int getAccReceiveDamage() {
+        return accReceiveDamage;
+    }
+
+    public int getDodgeChance() {
+        return dodgeChance;
+    }
+
+    public String getLastAction() {
+        return lastAction;
+    }
+
+    public void setLastAction(String lastAction) {
+        this.lastAction = lastAction;
     }
 
     public void setAnimator(Animator<State> animator) {

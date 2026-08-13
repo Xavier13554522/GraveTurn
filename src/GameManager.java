@@ -1,5 +1,7 @@
 package src;
+
 import javax.swing.*;
+
 class GameManager {
     private boolean playerTurn = true;
     private boolean gameOver = false;
@@ -28,11 +30,11 @@ class GameManager {
         if (player.getHealth() <= 0) {
             gameOver = true;
             winner = "Enemy";
-            checkGameOver();
+            checkGameOver(enemy);
         } else if (enemy.getHealth() <= 0) {
             gameOver = true;
             winner = "Player";
-            checkGameOver();
+            checkGameOver(player);
         }
     }
 
@@ -42,6 +44,10 @@ class GameManager {
 
     public boolean getGameOver() {
         return gameOver;
+    }
+
+    public int getTurnCount() {
+        return turnCount;
     }
 
     public void resetGame() {
@@ -55,10 +61,10 @@ class GameManager {
         return playerTurn;
     }
 
-    public void checkGameOver() {
+    public void checkGameOver(Character winnerPlayer) {
         if (gameOver) {
             AudioManager.getInstance().playEffect("dead");
-            createWindow.setPanel(new PanelGameOver(createWindow, this, winner), "GameOver");
+            createWindow.setPanel(new PanelGameOver(createWindow, this, winnerPlayer, winner), "GameOver");
             Timer timer = new Timer(2000, e -> {
                 createWindow.showPanel("GameOver");
             });
