@@ -18,7 +18,13 @@ public class PanelInitialize extends JPanel {
         bg.setLayout(new GridBagLayout());
         // Objeto para dar las instrucciones de posición
         GridBagConstraints gbc = new GridBagConstraints();
-
+        
+        BackgroundPanel title = new BackgroundPanel("title.png", 550, 150);
+        title.setOpaque(false);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        bg.add(title, gbc);
         // 2. CONFIGURACIÓN DEL BOTÓN (Fila 1)
         Button button = new Button("Play", null);
         button.addActionListener(e -> {

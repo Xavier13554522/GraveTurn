@@ -31,7 +31,7 @@ public class Character {
 
     public void receiveDamage(int damage) {
         if (this.health > 0) {
-            this.health -= damage;
+            this.health -= health > damage ? damage : this.health;
             setState(State.HURT);
             accReceiveDamage += damage;
         }
@@ -148,6 +148,9 @@ public class Character {
             setState(State.IDLE);
         }
         if (state == State.DODGE && animator.getCompleted().getOrDefault(State.DODGE, false)) {
+            setState(State.IDLE);
+        }
+        if (state == State.HEAL && animator.getCompleted().getOrDefault(State.HEAL, false)) {
             setState(State.IDLE);
         }
     }

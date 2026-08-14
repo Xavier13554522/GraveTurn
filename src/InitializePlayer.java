@@ -13,6 +13,8 @@ public class InitializePlayer {
                                                 false));
                 playerFrames.put(Character.State.HURT,
                                 LoadFrames.loadFrames(Paths.SelectCharacter(characterName) + "Hurt/", 4, true, false));
+                playerFrames.put(Character.State.HEAL,
+                                LoadFrames.loadFrames(Paths.SelectCharacter(characterName) + "Heal/", 3, true, false));
                 playerFrames.put(Character.State.DODGE,
                                 LoadFrames.loadFrames(Paths.SelectCharacter(characterName) + "Dodge/", 3, true, false));
                 playerFrames.put(Character.State.DEAD,

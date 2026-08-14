@@ -3,6 +3,7 @@ package src;
 import java.awt.*;
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
+import java.util.Timer;
 
 public class ActionsContainer extends JPanel {
     private final Button attackButton;
@@ -69,5 +70,16 @@ public class ActionsContainer extends JPanel {
         attackButton.setEnabled(playerTurn && !isWinner);
         dodgeButton.setEnabled(playerTurn && !isWinner);
         healButton.setEnabled(playerTurn && !isWinner && playersPotions);
+
+        if (playersPotions) {
+            if (player.getPotion() >= 3) {
+                healButton.setIcon(Paths.SelectPotion("1") + "3.png");
+            } else if (player.getPotion() == 2) {
+                healButton.setIcon(Paths.SelectPotion("1") + "2.png");
+            } else {
+                healButton.setIcon(Paths.SelectPotion("1") + "1.png");
+            }
+
+        }
     }
 }

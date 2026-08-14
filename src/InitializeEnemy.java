@@ -13,6 +13,10 @@ public class InitializeEnemy {
                                                 true));
                 enemyFrames.put(Character.State.HURT,
                                 LoadFrames.loadFrames(Paths.SelectEnemy(characterName) + "Hurt/", 4, true, true));
+                enemyFrames.put(Character.State.HURT,
+                                LoadFrames.loadFrames(Paths.SelectEnemy(characterName) + "Hurt/", 4, true, true));
+                enemyFrames.put(Character.State.HEAL,
+                                LoadFrames.loadFrames(Paths.SelectEnemy(characterName) + "Heal/", 3, true, true));
                 enemyFrames.put(Character.State.DODGE,
                                 LoadFrames.loadFrames(Paths.SelectEnemy(characterName) + "Dodge/", 3, true, true));
                 enemyFrames.put(Character.State.DEAD,
