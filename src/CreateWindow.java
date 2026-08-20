@@ -23,6 +23,11 @@ public class CreateWindow extends JFrame {
         this.setVisible(true);
     }
     public void showPanel(String name) {
+        if (name.equals("Game") && panels.containsKey("Game")) {
+            PanelGame previousGame = (PanelGame) panels.remove("Game");
+            previousGame.stopTimers();
+            container.remove(previousGame);
+        }
         if (!panels.containsKey(name)) {
             if (name.equals("Home")) {
                 PanelInitialize panel = new PanelInitialize(this);
@@ -46,6 +51,7 @@ public class CreateWindow extends JFrame {
         containerCards.show(container, name);
         this.pack();
         this.setLocationRelativeTo(null);
+        this.repaint();
     }
 
     public void setPanel(JPanel panel, String name) {

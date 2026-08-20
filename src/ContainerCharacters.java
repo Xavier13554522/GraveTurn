@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 public class ContainerCharacters extends JPanel {
     Frame frame;
     Frame frameEnemy;
+    private final Timer timer;
 
     public ContainerCharacters(Player player, Enemy enemy) {
         this.setOpaque(false);
@@ -20,13 +21,17 @@ public class ContainerCharacters extends JPanel {
         this.add(frame);
         this.add(frameEnemy);
 
-        Timer timer = new Timer(100, e -> {
+        timer = new Timer(100, e -> {
             player.update(100);
             enemy.update(100);
             frame.repaint();
             frameEnemy.repaint();
         });
         timer.start();
+    }
+
+    public void stopTimer() {
+        timer.stop();
     }
 
 }

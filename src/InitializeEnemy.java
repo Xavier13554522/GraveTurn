@@ -21,7 +21,7 @@ public class InitializeEnemy {
                                 LoadFrames.loadFrames(Paths.SelectEnemy(characterName) + "Dodge/", 3, true, true));
                 enemyFrames.put(Character.State.DEAD,
                                 LoadFrames.loadFrames(Paths.SelectEnemy(characterName) + "Dead/", 2, true, true));
-                return new Enemy(characterName, "A mysterious character with a dark past.", 100, 10, 3,
+                return new Enemy(characterName, "A mysterious character with a dark past.", 10, 10, 3,
                                 new Animator<>(enemyFrames, 150));
         }
 }

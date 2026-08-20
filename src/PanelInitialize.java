@@ -25,8 +25,11 @@ public class PanelInitialize extends JPanel {
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 0, 0);
         bg.add(title, gbc);
+
+        int btnwidth = 150;
+        int btnheight = 50;
         // 2. CONFIGURACIÓN DEL BOTÓN (Fila 1)
-        Button button = new Button("Play", null);
+        Button button = new Button("Play", null,Paths.BACKGROUND +"buttons/1/button.png",btnwidth,btnheight);
         button.addActionListener(e -> {
             AudioManager.getInstance().stopMusic();
             createWindow.showPanel("Game");
@@ -38,7 +41,7 @@ public class PanelInitialize extends JPanel {
         bg.add(button, gbc);
 
         // 3. CONFIGURACIÓN DEL PANEL (Fila 2)
-        Button buttonExit = new Button("Exit", null);
+        Button buttonExit = new Button("Exit", null,Paths.BACKGROUND +"buttons/1/button.png",btnwidth,btnheight);
         buttonExit.addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(buttonExit, "¿Estás seguro de que quieres salir?",
                     "Confirmar salida", JOptionPane.YES_NO_OPTION);

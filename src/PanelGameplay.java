@@ -5,12 +5,15 @@ import javax.swing.Timer;
 import java.awt.*;
 
 class PanelGameplay extends JPanel {
+    private final ContainerCharacters containerCharacters;
+    private final ContainerText containerText;
+
     public PanelGameplay(Player player, Enemy enemy, GameManager gameManager) {
         this.setBackground(Color.WHITE);
         this.setPreferredSize(new Dimension(640, 300));
         this.setLayout(new BorderLayout());
-        ContainerText containerText = new ContainerText(player, enemy);
-        ContainerCharacters containerCharacters = new ContainerCharacters(player, enemy);
+        containerText = new ContainerText(player, enemy);
+        containerCharacters = new ContainerCharacters(player, enemy);
         containerCharacters.setOpaque(false);
         containerText.setOpaque(false);
         //
@@ -34,5 +37,10 @@ class PanelGameplay extends JPanel {
         backgroundPanel.add(containerCharacters, BorderLayout.CENTER);
 
         this.add(backgroundPanel, BorderLayout.CENTER);
+    }
+
+    public void stopTimers() {
+        containerText.stopTimer();
+        containerCharacters.stopTimer();
     }
 }

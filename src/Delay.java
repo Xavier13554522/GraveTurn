@@ -12,6 +12,7 @@ public class Delay {
         if (actionConditionAttack(actionEnemy, enemy, player, gameManager, onTurnFinished, intelligence)) {
             return;
         }
+        gameManager.checkWinner(player, enemy);
         Timer timer = new Timer(1000, e -> {
             if (gameManager.getGameOver() || gameManager.getPlayerTurn()) {
                 return;
@@ -27,7 +28,7 @@ public class Delay {
         if (player.getLastAction() != null && player.getLastAction().equals("dodge")) {
             dodgePlayerAction(actionRunnable, enemy, player, intelligence);
         } else {
-            actionDecided(actionEnemy, enemy, player);
+            actionDecided(actionEnemy, enemy, player,gameManager);
         }
         Timer timer = new Timer(1000, e2 -> {
             if (gameManager.getGameOver()) {
@@ -35,6 +36,7 @@ public class Delay {
             }
             gameManager.nextTurn();
             onTurnFinished.run();
+            gameManager.checkWinner(player, enemy);
         });
         timer.setRepeats(false);
         timer.start();
@@ -97,7 +99,10 @@ public class Delay {
         }
     }
 
-    private static void actionDecided(String actionEnemy, Enemy enemy, Player player) {
+    private static void actionDecided(String actionEnemy, Enemy enemy, Player player,GameManager gameManager) {
+        if (gameManager.getGameOver() || gameManager.getPlayerTurn()) {
+                return;
+            }
         if (actionEnemy.equals("attack")) {
             enemy.attack(player);
             AudioManager.getInstance().playEffect("attack");

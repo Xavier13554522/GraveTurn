@@ -38,12 +38,15 @@ public class ActionsContainer extends JPanel {
 
     private Button createActionButton(BackgroundPanel bg, GridBagConstraints gbc, int gridx, String iconPath,
             Runnable action, Runnable delayedAction) {
-        Button button = new Button(null, iconPath);
+        String pathbgImage = Paths.BACKGROUND + "buttonAction.png";
+        Button button = new Button(null, iconPath, null,80,80);
         button.addActionListener(e -> executePlayerAction(action, delayedAction));
 
         gbc.gridx = gridx;
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 10, 0, 10);
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(8, 12, 0, 12);
         bg.add(button, gbc);
         return button;
     }

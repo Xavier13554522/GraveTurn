@@ -7,30 +7,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Button extends JButton {
-    public Button(String text, String pathImage) {
+    private Image backgroundImage;
+
+    public Button(String text, String pathImage,String pathBgImage,Integer width,Integer height) {
         super(text == null ? "" : text);
-        this.setPreferredSize(new java.awt.Dimension(100, 80));
+        this.setPreferredSize(new Dimension(width == null ? 150 : width, height == null ? 50 : height));
         this.setFont(new Font("Arial", Font.BOLD, 18));
-        this.setBackground(Color.GRAY);
-        if (pathImage != null && !pathImage.isEmpty()) {
-            ImageIcon icon = new ImageIcon(pathImage);
-            Image scaledImage = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
-            this.setIcon(new ImageIcon(scaledImage));
-        }
+        setIcon(pathImage);
+        setBackgroundImage(pathBgImage);
         this.setForeground(Color.WHITE);
         this.setFocusable(false);
-
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setBackground(Color.DARK_GRAY);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setBackground(Color.GRAY);
-            }
-        });
     }
     public void setMouseEvent(MouseAdapter mouseEntered,MouseAdapter mouseExited) {
         this.addMouseListener(new MouseAdapter() {
@@ -45,11 +31,34 @@ public class Button extends JButton {
             }
         });
     }
+    //fondo a los botones
+    public void setBackgroundImage(String pathBgImage) {
+        if (pathBgImage != null && !pathBgImage.isEmpty()) {
+            ImageIcon bgIcon = new ImageIcon(pathBgImage);
+            this.backgroundImage = bgIcon.getImage();
+            this.setContentAreaFilled(false);
+            this.setBorderPainted(false);
+            this.setOpaque(false);
+        } else {
+            this.backgroundImage = null;
+            this.setContentAreaFilled(false);
+            this.setBorderPainted(false);
+            this.setOpaque(false);
+        }
+        repaint();
+    }
 
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        if (backgroundImage != null) {
+            graphics.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+        super.paintComponent(graphics);
+    }
     public void setIcon(String pathImage) {
         if (pathImage != null && !pathImage.isEmpty()) {
             ImageIcon icon = new ImageIcon(pathImage);
-            Image scaledImage = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+            Image scaledImage = icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             this.setIcon(new ImageIcon(scaledImage));
         } else {
             this.setIcon((javax.swing.Icon) null);

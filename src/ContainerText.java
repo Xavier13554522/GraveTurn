@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 public class ContainerText extends JPanel {
     LabelsComponents labelPlayerHealth;
     LabelsComponents labelEnemyHealth;
+    private final Timer timer;
 
     public ContainerText(Player player, Enemy enemy) {
         this.setOpaque(false);
@@ -16,12 +17,16 @@ public class ContainerText extends JPanel {
         this.labelPlayerHealth = new LabelsComponents("Vida: " + player.getHealth());
         this.labelEnemyHealth = new LabelsComponents("Vida: " + enemy.getHealth());
 
-        Timer timer = new Timer(100, e -> {
+        timer = new Timer(100, e -> {
             labelPlayerHealth.setText("Vida: " + player.getHealth());
             labelEnemyHealth.setText("Vida: " + enemy.getHealth());
         });
         timer.start();
         this.add(labelPlayerHealth);
         this.add(labelEnemyHealth);
+    }
+
+    public void stopTimer() {
+        timer.stop();
     }
 }

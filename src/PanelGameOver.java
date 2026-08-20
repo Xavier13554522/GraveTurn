@@ -50,7 +50,8 @@ public class PanelGameOver extends JPanel {
         gbc.gridy = 7;
         this.add(labelAccDodge, gbc);
 
-        LabelsComponents labelAccReceiveDamage = new LabelsComponents("accReceiveDamage: " + winner.getAccReceiveDamage());
+        LabelsComponents labelAccReceiveDamage = new LabelsComponents(
+                "accReceiveDamage: " + winner.getAccReceiveDamage());
         gbc.gridy = 8;
         this.add(labelAccReceiveDamage, gbc);
 
@@ -58,7 +59,7 @@ public class PanelGameOver extends JPanel {
         gbc.gridy = 9;
         this.add(labelCurrentHealth, gbc);
 
-        Button buttonBack = new Button("Back", null);
+        Button buttonBack = new Button("Back", null, Paths.BACKGROUND + "buttons/1/button.png", 150, 50);
         buttonBack.addActionListener(e -> createWindow.showPanel("Home"));
         gbc.gridy = 10;
         gbc.insets = new Insets(20, 0, 0, 0);

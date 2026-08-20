@@ -4,6 +4,8 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class PanelGame extends JPanel {
+        private final PanelGameplay gameplay;
+
         public PanelGame(CreateWindow createWindow) {
                 this.setBackground(Color.DARK_GRAY);
                 this.setLayout(new GridBagLayout());
@@ -13,16 +15,20 @@ public class PanelGame extends JPanel {
                 Enemy enemy = InitializeEnemy.initializeEnemy("Black-Hat");
                 GridBagConstraints gbc = new GridBagConstraints();
 
-                PanelGameplay windowGameplay = new PanelGameplay(player, enemy, gameManager);
+                gameplay = new PanelGameplay(player, enemy, gameManager);
                 gbc.gridx = 0;
                 gbc.gridy = 0;
                 gbc.insets = new Insets(0, 0, 0, 0);
-                this.add(windowGameplay, gbc);
+                this.add(gameplay, gbc);
 
                 PanelActions panelActions = new PanelActions(player, enemy, gameManager);
                 gbc.gridx = 0;
                 gbc.gridy = 1;
                 gbc.insets = new Insets(0, 0, 0, 0);
                 this.add(panelActions, gbc);
+        }
+
+        public void stopTimers() {
+                gameplay.stopTimers();
         }
 }
