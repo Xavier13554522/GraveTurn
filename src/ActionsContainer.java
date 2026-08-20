@@ -2,8 +2,6 @@ package src;
 
 import java.awt.*;
 import javax.swing.JPanel;
-import java.awt.GridBagConstraints;
-import java.util.Timer;
 
 public class ActionsContainer extends JPanel {
     private final Button attackButton;
@@ -38,10 +36,11 @@ public class ActionsContainer extends JPanel {
 
     private Button createActionButton(BackgroundPanel bg, GridBagConstraints gbc, int gridx, String iconPath,
             Runnable action, Runnable delayedAction) {
-        String pathbgImage = Paths.BACKGROUND + "buttonAction.png";
         Button button = new Button(null, iconPath, null,80,80);
+        button.setMouseEvent(
+            () -> button.setIconColor(new Color(255, 215, 80)),
+            () -> button.setIconColor(null));
         button.addActionListener(e -> executePlayerAction(action, delayedAction));
-
         gbc.gridx = gridx;
         gbc.gridy = 0;
         gbc.weighty = 1.0;

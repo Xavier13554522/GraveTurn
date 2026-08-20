@@ -4,6 +4,11 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class PanelGameOver extends JPanel {
+    private static final String BUTTON_PATH = Paths.BACKGROUND + "buttons/1/";
+    private static final String NORMAL_BUTTON = BUTTON_PATH + "button.png";
+    private static final String PRESSED_BUTTON = BUTTON_PATH + "press-button.png";
+    private static final String ACTIVE_BUTTON = BUTTON_PATH + "active-button.png";
+
     public PanelGameOver(CreateWindow createWindow, GameManager gameManager, Character winner, String winnerName) {
         this.setBackground(Color.DARK_GRAY);
         this.setLayout(new GridBagLayout());
@@ -59,8 +64,14 @@ public class PanelGameOver extends JPanel {
         gbc.gridy = 9;
         this.add(labelCurrentHealth, gbc);
 
-        Button buttonBack = new Button("Back", null, Paths.BACKGROUND + "buttons/1/button.png", 150, 50);
-        buttonBack.addActionListener(e -> createWindow.showPanel("Home"));
+        Button buttonBack = new Button("Back", null, NORMAL_BUTTON, 200, 60);
+        buttonBack.setMouseEvent(
+            () -> buttonBack.setBackgroundImage(ACTIVE_BUTTON),
+            () -> buttonBack.setBackgroundImage(NORMAL_BUTTON));
+        buttonBack.addActionListener(e -> {
+            buttonBack.setBackgroundImage(PRESSED_BUTTON);
+            createWindow.showPanel("Home");
+        });
         gbc.gridy = 10;
         gbc.insets = new Insets(20, 0, 0, 0);
         this.add(buttonBack, gbc);

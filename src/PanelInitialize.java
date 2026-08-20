@@ -6,6 +6,10 @@ import javax.swing.JPanel;
 import java.awt.*;
 
 public class PanelInitialize extends JPanel {
+    private static final String BUTTON_PATH = Paths.BACKGROUND + "buttons/1/";
+    private static final String NORMAL_BUTTON = BUTTON_PATH + "button.png";
+    private static final String PRESSED_BUTTON = BUTTON_PATH + "press-button.png";
+    private static final String ACTIVE_BUTTON = BUTTON_PATH + "active-button.png";
 
     public PanelInitialize(CreateWindow createWindow) {
         this.setBackground(Color.BLACK);
@@ -18,7 +22,7 @@ public class PanelInitialize extends JPanel {
         bg.setLayout(new GridBagLayout());
         // Objeto para dar las instrucciones de posición
         GridBagConstraints gbc = new GridBagConstraints();
-        
+
         BackgroundPanel title = new BackgroundPanel("title.png", 550, 150);
         title.setOpaque(false);
         gbc.gridx = 0;
@@ -26,11 +30,13 @@ public class PanelInitialize extends JPanel {
         gbc.insets = new Insets(20, 0, 0, 0);
         bg.add(title, gbc);
 
-        int btnwidth = 150;
-        int btnheight = 50;
+        int btnwidth = 200;
+        int btnheight = 60;
         // 2. CONFIGURACIÓN DEL BOTÓN (Fila 1)
-        Button button = new Button("Play", null,Paths.BACKGROUND +"buttons/1/button.png",btnwidth,btnheight);
+        Button button = new Button("Play", null, NORMAL_BUTTON, btnwidth, btnheight);
+        configureButtonStyle(button);
         button.addActionListener(e -> {
+            button.setBackgroundImage(PRESSED_BUTTON);
             AudioManager.getInstance().stopMusic();
             createWindow.showPanel("Game");
         });
@@ -41,8 +47,10 @@ public class PanelInitialize extends JPanel {
         bg.add(button, gbc);
 
         // 3. CONFIGURACIÓN DEL PANEL (Fila 2)
-        Button buttonExit = new Button("Exit", null,Paths.BACKGROUND +"buttons/1/button.png",btnwidth,btnheight);
+        Button buttonExit = new Button("Exit", null, NORMAL_BUTTON, btnwidth, btnheight);
+        configureButtonStyle(buttonExit);
         buttonExit.addActionListener(e -> {
+            buttonExit.setBackgroundImage(PRESSED_BUTTON);
             int response = JOptionPane.showConfirmDialog(buttonExit, "¿Estás seguro de que quieres salir?",
                     "Confirmar salida", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
@@ -55,5 +63,11 @@ public class PanelInitialize extends JPanel {
 
         bg.add(buttonExit, gbc);
         this.add(bg, BorderLayout.CENTER);
+    }
+
+    private void configureButtonStyle(Button button) {
+        button.setMouseEvent(
+                () -> button.setBackgroundImage(ACTIVE_BUTTON),
+                () -> button.setBackgroundImage(NORMAL_BUTTON));
     }
 }
