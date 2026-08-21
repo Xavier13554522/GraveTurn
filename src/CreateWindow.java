@@ -38,6 +38,8 @@ public class CreateWindow extends JFrame {
                 panels.put("Game", panelGame);
                 container.add(panelGame, "Game");
             }
+        } else if (name.equals("Home")) {
+            AudioManager.getInstance().playBackgroundMusic("background");
         }
         if (panels.containsKey(name)) {
             containerCards.show(container, name);
