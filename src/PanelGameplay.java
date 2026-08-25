@@ -43,4 +43,8 @@ class PanelGameplay extends JPanel {
         containerText.stopTimer();
         containerCharacters.stopTimer();
     }
+
+    public EffectsManager getEffectsManager() {
+        return containerCharacters.getEffectsManager();
+    }
 }

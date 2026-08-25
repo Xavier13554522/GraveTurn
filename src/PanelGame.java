@@ -21,7 +21,8 @@ public class PanelGame extends JPanel {
                 gbc.insets = new Insets(0, 0, 0, 0);
                 this.add(gameplay, gbc);
 
-                PanelActions panelActions = new PanelActions(player, enemy, gameManager);
+                PanelActions panelActions = new PanelActions(
+                                player, enemy, gameManager, gameplay.getEffectsManager());
                 gbc.gridx = 0;
                 gbc.gridy = 1;
                 gbc.insets = new Insets(0, 0, 0, 0);

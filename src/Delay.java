@@ -6,10 +6,11 @@ import src.Character.State;
 
 public class Delay {
     static public void executeDelayCode(Enemy enemy, Player player, GameManager gameManager, Runnable onTurnFinished,
-            Runnable actionRunnable) {
+            Runnable actionRunnable, EffectsManager effectsManager) {
         Inteligence intelligence = new Inteligence(player, enemy);
         String actionEnemy = intelligence.decideAction();
-        if (actionConditionAttack(actionEnemy, enemy, player, gameManager, onTurnFinished, intelligence)) {
+        if (actionConditionAttack(actionEnemy, enemy, player, gameManager, onTurnFinished,
+                intelligence, effectsManager)) {
             return;
         }
         gameManager.checkWinner(player, enemy);
@@ -17,18 +18,20 @@ public class Delay {
             if (gameManager.getGameOver() || gameManager.getPlayerTurn()) {
                 return;
             }
-            executeCode(enemy, player, gameManager, onTurnFinished, actionRunnable, intelligence, actionEnemy);
+            executeCode(enemy, player, gameManager, onTurnFinished, actionRunnable,
+                    intelligence, actionEnemy, effectsManager);
         });
         timer.setRepeats(false);
         timer.start();
     }
 
     public static void executeCode(Enemy enemy, Player player, GameManager gameManager, Runnable onTurnFinished,
-            Runnable actionRunnable, Inteligence intelligence, String actionEnemy) {
+            Runnable actionRunnable, Inteligence intelligence, String actionEnemy,
+            EffectsManager effectsManager) {
         if (player.getLastAction() != null && player.getLastAction().equals("dodge")) {
-            dodgePlayerAction(actionRunnable, enemy, player, intelligence);
+            dodgePlayerAction(actionRunnable, enemy, player, intelligence, effectsManager);
         } else {
-            actionDecided(actionEnemy, enemy, player,gameManager);
+            actionDecided(actionEnemy, enemy, player, gameManager, effectsManager);
         }
         Timer timer = new Timer(1000, e2 -> {
             if (gameManager.getGameOver()) {
@@ -44,9 +47,12 @@ public class Delay {
 
     private static boolean actionConditionAttack(String actionEnemy, Enemy enemy, Player player,
             GameManager gameManager,
-            Runnable onTurnFinished, Inteligence intelligence) {
+            Runnable onTurnFinished, Inteligence intelligence, EffectsManager effectsManager) {
         if (player.getLastAction() != null && player.getLastAction().equals("attack") && !actionEnemy.equals("dodge")) {
             player.attack(enemy);
+            if (!playDeathSlash(enemy, effectsManager)) {
+                effectsManager.playSlashPlayer(480, 75);
+            }
             AudioManager.getInstance().playEffect("attack");
             return false;
         } else if (player.getLastAction() != null && player.getLastAction().equals("attack")
@@ -55,7 +61,7 @@ public class Delay {
                 if (gameManager.getGameOver()) {
                     return;
                 }
-                dodgeEnemyAction(enemy, player, intelligence);
+                dodgeEnemyAction(enemy, player, intelligence, effectsManager);
                 if (!gameManager.getGameOver()) {
                     gameManager.nextTurn();
                 }
@@ -69,7 +75,7 @@ public class Delay {
     }
 
     private static void dodgePlayerAction(Runnable actionRunnable, Enemy enemy, Player player,
-            Inteligence intelligence) {
+            Inteligence intelligence, EffectsManager effectsManager) {
         if (intelligence.isDodgeAttack()) {
             if (actionRunnable != null) {
                 enemy.setState(State.ATTACK);
@@ -79,13 +85,17 @@ public class Delay {
             }
         } else {
             enemy.setState(State.ATTACK);
+            effectsManager.suppressNextBlood();
             player.receiveDamage(player.getDamage() / 2);
+            if (!playDeathSlash(player, effectsManager)) {
+                effectsManager.playDodgeFailed(120, 100);
+            }
             AudioManager.getInstance().playEffect("attack");
         }
     }
 
     private static void dodgeEnemyAction(Enemy enemy, Player player,
-            Inteligence intelligence) {
+            Inteligence intelligence, EffectsManager effectsManager) {
         System.out.println("Player last action: " + player.getLastAction());
         if (intelligence.isDodgeAttack()) {
             player.setState(State.ATTACK);
@@ -94,24 +104,48 @@ public class Delay {
             AudioManager.getInstance().playEffect("dodge");
         } else {
             player.setState(State.ATTACK);
+            effectsManager.suppressNextBlood();
             enemy.receiveDamage(enemy.getDamage() / 2);
+            if (!playDeathSlash(enemy, effectsManager)) {
+                effectsManager.playDodgeFailed(480, 100);
+            }
             AudioManager.getInstance().playEffect("attack");
         }
     }
 
-    private static void actionDecided(String actionEnemy, Enemy enemy, Player player,GameManager gameManager) {
+    private static void actionDecided(String actionEnemy, Enemy enemy, Player player, GameManager gameManager,
+            EffectsManager effectsManager) {
         if (gameManager.getGameOver() || gameManager.getPlayerTurn()) {
-                return;
-            }
+            return;
+        }
         if (actionEnemy.equals("attack")) {
             enemy.attack(player);
+            if (!playDeathSlash(player, effectsManager)) {
+                effectsManager.playSlashEnemy(160, 75);
+            }
             AudioManager.getInstance().playEffect("attack");
         } else if (actionEnemy.equals("heal")) {
             enemy.heal();
             AudioManager.getInstance().playEffect("heal");
         } else {
             enemy.attack(player);
+            if (!playDeathSlash(player, effectsManager)) {
+                effectsManager.playSlashEnemy(160, 75);
+            }
             AudioManager.getInstance().playEffect("attack");
         }
+    }
+
+    private static boolean playDeathSlash(Character character, EffectsManager effectsManager) {
+        if (character.getState() != State.DEAD) {
+            return false;
+        }
+
+        if (character instanceof Player) {
+            effectsManager.playSlashDeadEnemy(160, 75);
+        } else {
+            effectsManager.playSlashDeadPlayer(480, 75);
+        }
+        return true;
     }
 }

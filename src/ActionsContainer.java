@@ -10,14 +10,16 @@ public class ActionsContainer extends JPanel {
     private final GameManager gameManager;
     private final Player player;
     private final Enemy enemy;
+    private final EffectsManager effectsManager;
 
-    public ActionsContainer(Player player, Enemy enemy, GameManager gameManager) {
+        public ActionsContainer(Player player, Enemy enemy, GameManager gameManager,
+            EffectsManager effectsManager) {
         this.player = player;
         this.enemy = enemy;
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
         this.gameManager = gameManager;
-
+        this.effectsManager = effectsManager;
         BackgroundPanel bg = new BackgroundPanel("action-table.png", 640, 180);
         bg.setLayout(new GridBagLayout());
         bg.setOpaque(false);
@@ -27,7 +29,7 @@ public class ActionsContainer extends JPanel {
                 () -> {
                     player.setLastAction("attack");
                 }, null);
-        dodgeButton = createActionButton(bg, gbc, 1, Paths.SelectShield("1.png"), () -> player.setLastAction("dodge"),
+        dodgeButton = createActionButton(bg, gbc, 1, Paths.SelectDodge("1.png"), () -> player.setLastAction("dodge"),
                 () -> player.Dodge());
         healButton = createActionButton(bg, gbc, 2, Paths.SelectPotion("1") + "3.png", () -> player.heal(), null);
         updateButtonsState();
@@ -61,7 +63,8 @@ public class ActionsContainer extends JPanel {
 
         gameManager.nextTurn();
         updateButtonsState();
-        Delay.executeDelayCode(enemy, player, gameManager, this::updateButtonsState, delayedAction);
+        Delay.executeDelayCode(enemy, player, gameManager, this::updateButtonsState,
+            delayedAction, effectsManager);
     }
 
     private void updateButtonsState() {

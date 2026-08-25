@@ -14,6 +14,7 @@ public class Paths {
     public static final String POTIONS = ITEMS + "potions/";
     public static final String SHIELDS = ITEMS + "shields/";
     public static final String SWORD = ITEMS + "swords/";
+    public static final String DODGE = ITEMS + "dodges/";
     
     //THAT'S FUNCTIONS ARE USED TO SELECT THE PATH OF THE ASSETS
     public static String SelectBackground (String backgroundName){
@@ -33,5 +34,8 @@ public class Paths {
     }
     public static String SelectSword (String swordName){
         return SWORD + swordName + "/";
+    }
+    public static String SelectDodge(String dodgeName){
+        return DODGE + dodgeName + "/";
     }
 }
