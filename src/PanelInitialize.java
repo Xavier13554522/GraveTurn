@@ -14,8 +14,6 @@ public class PanelInitialize extends JPanel {
     public PanelInitialize(CreateWindow createWindow) {
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
-        AudioManager.getInstance().setMusicVolume(0.6f);
-        AudioManager.getInstance().setEffectsVolume(0.7f);
         AudioManager.getInstance().playBackgroundMusic("background");
 
         BackgroundPanel bg = new BackgroundPanel("background.png", 640, 480);

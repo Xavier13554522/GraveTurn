@@ -8,8 +8,18 @@ class GameManager {
     private int turnCount = 0;
     private String winner;
     private CreateWindow createWindow;
+    private int wins;
 
     public GameManager(CreateWindow createWindow) {
+        try {
+            SaveData saveData = SaveManager.load();
+            if(!saveData.equals(null)){
+                this.wins = saveData.wins;
+            }
+        } catch (Exception e) {
+            this.wins = 1;
+            e.printStackTrace();
+        }
         this.playerTurn = true;
         this.gameOver = false;
         this.turnCount = 0;
@@ -34,7 +44,34 @@ class GameManager {
         } else if (enemy.getHealth() <= 0) {
             gameOver = true;
             winner = "Player";
+            wins++;
+            saveNextRoundStats();
             checkGameOver(player);
+        }
+    }
+
+    private void saveNextRoundStats() {
+        SaveData saveData;
+        try {
+            saveData = SaveManager.load();
+            if (saveData == null) {
+                saveData = new SaveData();
+                saveData.playerHealth = 100;
+                saveData.playerDamage = 10;
+                saveData.playerPotion = 3;
+                saveData.enemyHealth = 100;
+                saveData.enemyDamage = 10;
+                saveData.enemyPotion = 3;
+            }
+
+            saveData.playerHealth *= saveData.wins;
+            saveData.playerDamage *= saveData.wins;
+            saveData.enemyHealth *= saveData.wins;
+            saveData.enemyDamage *= saveData.wins;
+            saveData.wins = wins;
+            SaveManager.save(saveData);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -44,6 +81,10 @@ class GameManager {
 
     public boolean getGameOver() {
         return gameOver;
+    }
+
+    public int getWins() {
+        return wins;
     }
 
     public int getTurnCount() {

@@ -3,6 +3,9 @@ package src;
 import javax.swing.*;
 
 import java.awt.CardLayout;
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,8 +13,11 @@ public class CreateWindow extends JFrame {
     private CardLayout containerCards = new CardLayout();
     private JPanel container = new JPanel(containerCards);
     private Map<String, JPanel> panels = new HashMap<>();
+    private boolean fullscreen;
     
     public CreateWindow() {
+        loadConfig();
+        this.setUndecorated(fullscreen);
         this.setIconImage(new ImageIcon(Paths.ASSETS + "ico.png").getImage());
         this.setTitle("Grave Turn-based Game");
         this.setResizable(false);
@@ -19,10 +25,48 @@ public class CreateWindow extends JFrame {
         this.add(container);
         showPanel("Home");
         this.pack();
-        this.setLocationRelativeTo(null); // Center the window
+        applyWindowMode();
         this.setVisible(true);
+        
     }
-    public void showPanel(String name) {
+
+    private void loadConfig() {
+        try {
+            ConfigData config = ConfigManager.load();
+            fullscreen = config.fullscreen;
+            AudioManager audioManager = AudioManager.getInstance();
+            audioManager.setMusicVolume(config.musicVolume / 100.0f);
+            audioManager.setEffectsVolume(config.effectsVolume / 100.0f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void applyWindowMode() {
+        if (fullscreen) {
+            GraphicsDevice device = GraphicsEnvironment
+                    .getLocalGraphicsEnvironment()
+                    .getDefaultScreenDevice();
+            device.setFullScreenWindow(this);
+
+            for (DisplayMode supportedMode : device.getDisplayModes()) {
+                if (supportedMode.getWidth() == 640 && supportedMode.getHeight() == 480) {
+                    try {
+                        device.setDisplayMode(supportedMode);
+                    } catch (IllegalArgumentException exception) {
+                        // El monitor no permite cambiar a esta profundidad de color.
+                    }
+                    break;
+                }
+            }
+        } else {
+            setExtendedState(JFrame.NORMAL);
+            pack();
+            setLocationRelativeTo(null);
+        }
+    }
+
+    public void showPanel(String name){
         if (name.equals("Game") && panels.containsKey("Game")) {
             PanelGame previousGame = (PanelGame) panels.remove("Game");
             previousGame.stopTimers();
@@ -34,7 +78,12 @@ public class CreateWindow extends JFrame {
                 panels.put("Home", panel);
                 container.add(panel, "Home");
             } else if (name.equals("Game")) {
-                PanelGame panelGame = new PanelGame(this);
+                PanelGame panelGame = null;
+                try {
+                    panelGame = new PanelGame(this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 panels.put("Game", panelGame);
                 container.add(panelGame, "Game");
             }
@@ -43,16 +92,14 @@ public class CreateWindow extends JFrame {
         }
         if (panels.containsKey(name)) {
             containerCards.show(container, name);
-            this.pack();
-            this.setLocationRelativeTo(null);
+            applyWindowMode();
         }
     }
 
     public void showPanel(JPanel panel, String name) {
         setPanel(panel, name);
         containerCards.show(container, name);
-        this.pack();
-        this.setLocationRelativeTo(null);
+        applyWindowMode();
         this.repaint();
     }
 

@@ -15,7 +15,12 @@ public class Paths {
     public static final String SHIELDS = ITEMS + "shields/";
     public static final String SWORD = ITEMS + "swords/";
     public static final String DODGE = ITEMS + "dodges/";
-    
+    //Data
+    public static final String DATA = "data/";
+    //Save
+    public static final String SAVE = "data/save/";
+    //Config
+    public static final String CONFIG = "data/config/";
     //THAT'S FUNCTIONS ARE USED TO SELECT THE PATH OF THE ASSETS
     public static String SelectBackground (String backgroundName){
         return BACKGROUND + backgroundName;

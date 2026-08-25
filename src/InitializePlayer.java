@@ -4,7 +4,12 @@ import java.awt.*;
 import java.util.*;
 
 public class InitializePlayer {
+        private static int playerHealth;
+        private static int playerPotion;
+        private static int playerDamage;
+
         public static Player initializePlayer(String characterName) {
+                loadPlayerData();
                 Map<Player.State, Map<Image[], Boolean>> playerFrames = new HashMap<>();
                 playerFrames.put(Character.State.IDLE,
                                 LoadFrames.loadFrames(Paths.SelectCharacter(characterName) + "Idle/", 4, false, false));
@@ -19,7 +24,28 @@ public class InitializePlayer {
                                 LoadFrames.loadFrames(Paths.SelectCharacter(characterName) + "Dodge/", 3, true, false));
                 playerFrames.put(Character.State.DEAD,
                                 LoadFrames.loadFrames(Paths.SelectCharacter(characterName) + "Dead/", 2, true, false));
-                return new Player(characterName, "A mysterious character with a dark past.", 100, 10, 3,
+                return new Player(characterName, "A mysterious character with a dark past.", playerHealth, playerDamage,
+                                playerPotion,
                                 new Animator<>(playerFrames, 150));
+        }
+
+        private static void loadPlayerData() {
+                try {
+                        SaveData saveData = SaveManager.load();
+                        if (saveData == null) {
+                                playerHealth = 100;
+                                playerPotion = 3;
+                                playerDamage = 10;
+                                return;
+                        }
+                        playerHealth = saveData.playerHealth;
+                        playerDamage = saveData.playerDamage;
+                        playerPotion = saveData.playerPotion;
+                } catch (Exception e) {
+                        playerHealth = 100;
+                        playerPotion = 3;
+                        playerDamage = 10;
+                        e.printStackTrace();
+                }
         }
 }

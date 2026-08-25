@@ -6,13 +6,20 @@ import javax.swing.JPanel;
 public class PanelGame extends JPanel {
         private final PanelGameplay gameplay;
 
-        public PanelGame(CreateWindow createWindow) {
+        public PanelGame(CreateWindow createWindow) throws Exception {
                 this.setBackground(Color.DARK_GRAY);
                 this.setLayout(new GridBagLayout());
                 AudioManager.getInstance().playBackgroundMusic("music-fight");
                 GameManager gameManager = new GameManager(createWindow);
+                
                 Player player = InitializePlayer.initializePlayer("Black-Hat");
                 Enemy enemy = InitializeEnemy.initializeEnemy("Black-Hat");
+
+                SaveData saveData = SaveManager.load();
+                if (saveData == null) {
+                        saveData = new SaveData(player, enemy, 1);
+                }
+                SaveManager.save(saveData);
                 GridBagConstraints gbc = new GridBagConstraints();
 
                 gameplay = new PanelGameplay(player, enemy, gameManager);

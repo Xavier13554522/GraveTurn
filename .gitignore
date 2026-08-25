@@ -1,8 +1,10 @@
 
 # Editor directories and files
 .vscode/*
+.data/*
 !.vscode/extensions.json
 .idea
 .DS_Store
 *.class
+*.properties
 
