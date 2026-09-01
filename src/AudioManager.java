@@ -70,7 +70,7 @@ public class AudioManager {
             baseName = fileName.substring(0, dotIndex);
         }
 
-        String[] extensions = {".wav", ".WAV"};
+        String[] extensions = { ".wav", ".WAV" };
         for (String ext : extensions) {
             File candidate = new File(folder + baseName + ext);
             if (candidate.exists()) {
@@ -78,11 +78,12 @@ public class AudioManager {
             }
         }
 
-        String[] legacyExtensions = {".mp3", ".MP3"};
+        String[] legacyExtensions = { ".mp3", ".MP3" };
         for (String ext : legacyExtensions) {
             File candidate = new File(folder + baseName + ext);
             if (candidate.exists()) {
-                System.out.println("Se encontró un archivo MP3: " + candidate.getPath() + ". Java no lo reproduce por defecto; conviértelo a WAV PCM.");
+                System.out.println("Se encontró un archivo MP3: " + candidate.getPath()
+                        + ". Java no lo reproduce por defecto; conviértelo a WAV PCM.");
                 return null;
             }
         }
@@ -106,7 +107,8 @@ public class AudioManager {
                 }
             } catch (Exception ex) {
                 if (audioFile.getName().toLowerCase().endsWith(".wav")) {
-                    System.out.println("El WAV no es compatible o no está en formato PCM. Re-exporta el audio como WAV PCM de 16 bits y 44100 Hz.");
+                    System.out.println(
+                            "El WAV no es compatible o no está en formato PCM. Re-exporta el audio como WAV PCM de 16 bits y 44100 Hz.");
                 }
                 System.out.println("No se pudo reproducir el audio: " + audioFile.getPath() + " -> " + ex.getMessage());
             }
@@ -153,6 +155,14 @@ public class AudioManager {
 
     public void setEffectsVolume(float volume) {
         this.effectsVolume = Math.min(Math.max(volume, 0f), 1f);
+    }
+
+    public void setMasterVolume(float volume) {
+        this.effectsVolume = Math.min(Math.max(volume, 0f), 1f);
+        this.musicVolume = Math.min(Math.max(volume, 0f), 1f);
+        if (backgroundClip != null) {
+            applyVolume(backgroundClip, this.musicVolume);
+        }
     }
 
     public float getMusicVolume() {

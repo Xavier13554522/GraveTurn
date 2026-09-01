@@ -12,7 +12,8 @@ public class Character {
     private int health;
     private int damage;
     private int potion;
-
+    private int heal = 20;
+    private int maxHealth;
     private String lastAction = null;
 
     private int accDamage, accPotion, accDodge, accReceiveDamage, dodgeChance;
@@ -27,6 +28,7 @@ public class Character {
         this.animator = animator;
         this.potion = potion;
         this.dodgeChance = 50;
+        this.maxHealth = health + (potion * heal);
     }
 
     public void receiveDamage(int damage) {
@@ -55,7 +57,7 @@ public class Character {
     public void heal() {
         if (this.potion > 0) {
             AudioManager.getInstance().playEffect("heal.wav");
-            this.health += 20; // Valor de curación, puedes ajustarlo según sea necesario
+            this.health += heal; // Valor de curación, puedes ajustarlo según sea necesario
             this.potion--;
             setState(State.HEAL);
             accPotion++;

@@ -15,7 +15,7 @@ public class PanelInitialize extends JPanel {
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
         AudioManager.getInstance().playBackgroundMusic("background");
-
+        
         BackgroundPanel bg = new BackgroundPanel("background.png", 640, 480);
         bg.setLayout(new GridBagLayout());
         // Objeto para dar las instrucciones de posición
@@ -40,9 +40,20 @@ public class PanelInitialize extends JPanel {
         });
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 40, 0);
+        gbc.insets = new Insets(0, 0, 25, 0);
 
         bg.add(button, gbc);
+
+        Button buttonConfig = new Button("Config", null, NORMAL_BUTTON, btnwidth, btnheight);
+        configureButtonStyle(buttonConfig);
+        buttonConfig.addActionListener(e -> {
+            buttonConfig.setBackgroundImage(PRESSED_BUTTON);
+            createWindow.showPanel("Config");
+        });
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.insets = new Insets(0, 0, 25, 0);
+        bg.add(buttonConfig, gbc);
 
         // 3. CONFIGURACIÓN DEL PANEL (Fila 2)
         Button buttonExit = new Button("Exit", null, NORMAL_BUTTON, btnwidth, btnheight);

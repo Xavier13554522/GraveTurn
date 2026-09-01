@@ -6,6 +6,7 @@ import java.awt.CardLayout;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,11 +24,29 @@ public class CreateWindow extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(container);
+        registerEscapeKey();
         showPanel("Home");
         this.pack();
         applyWindowMode();
         this.setVisible(true);
         
+    }
+
+    private void registerEscapeKey() {
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "goHome");
+        getRootPane().getActionMap().put("goHome", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (panels.containsKey("Game")) {
+                    PanelGame previousGame = (PanelGame) panels.get("Game");
+                    if (previousGame != null) {
+                        previousGame.stopTimers();
+                    }
+                }
+                showPanel("Home");
+            }
+        });
     }
 
     private void loadConfig() {
@@ -43,10 +62,11 @@ public class CreateWindow extends JFrame {
     }
 
     private void applyWindowMode() {
+        GraphicsDevice device = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice();
+
         if (fullscreen) {
-            GraphicsDevice device = GraphicsEnvironment
-                    .getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice();
             device.setFullScreenWindow(this);
 
             for (DisplayMode supportedMode : device.getDisplayModes()) {
@@ -60,6 +80,7 @@ public class CreateWindow extends JFrame {
                 }
             }
         } else {
+            device.setFullScreenWindow(null);
             setExtendedState(JFrame.NORMAL);
             pack();
             setLocationRelativeTo(null);
@@ -86,6 +107,10 @@ public class CreateWindow extends JFrame {
                 }
                 panels.put("Game", panelGame);
                 container.add(panelGame, "Game");
+            } else if (name.equals("Config")) {
+                ConfigPanel panel = new ConfigPanel(this);
+                panels.put("Config", panel);
+                container.add(panel, "Config");
             }
         } else if (name.equals("Home")) {
             AudioManager.getInstance().playBackgroundMusic("background");
@@ -109,5 +134,26 @@ public class CreateWindow extends JFrame {
         }
         panels.put(name, panel);
         container.add(panel, name);
+    }
+
+    public void applyConfiguration(ConfigData config) {
+        this.fullscreen = config.fullscreen;
+        AudioManager.getInstance().setMusicVolume(config.musicVolume / 100.0f);
+        AudioManager.getInstance().setEffectsVolume(config.effectsVolume / 100.0f);
+
+        if (isDisplayable()) {
+            setVisible(false);
+            dispose();
+        }
+
+        setUndecorated(fullscreen);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        add(container);
+        pack();
+        applyWindowMode();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        this.repaint();
     }
 }

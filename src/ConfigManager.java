@@ -15,7 +15,6 @@ public class ConfigManager {
         properties.setProperty("musicVolume", Integer.toString(data.musicVolume));
         properties.setProperty("effectsVolume", Integer.toString(data.effectsVolume));
         properties.setProperty("fullscreen", Boolean.toString(data.fullscreen));
-
         Files.createDirectories(CONFIG_FILE.getParent());
         try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
             properties.store(writer, "Game Config");
@@ -39,7 +38,7 @@ public class ConfigManager {
         data.effectsVolume = getInt(properties, "effectsVolume", data.effectsVolume);
         data.fullscreen = Boolean.parseBoolean(
                 properties.getProperty("fullscreen", Boolean.toString(data.fullscreen)));
-        return data;
+                return data;
     }
 
     private static int getInt(Properties properties, String key, int defaultValue) {

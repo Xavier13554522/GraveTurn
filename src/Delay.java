@@ -57,11 +57,11 @@ public class Delay {
             return false;
         } else if (player.getLastAction() != null && player.getLastAction().equals("attack")
                 && actionEnemy.equals("dodge")) {
+            dodgeEnemyAction(enemy, player, intelligence, effectsManager);
             Timer timer = new Timer(1000, e -> {
                 if (gameManager.getGameOver()) {
                     return;
                 }
-                dodgeEnemyAction(enemy, player, intelligence, effectsManager);
                 if (!gameManager.getGameOver()) {
                     gameManager.nextTurn();
                 }
