@@ -18,7 +18,7 @@ public class ContainerCharacters extends JPanel {
 
     public ContainerCharacters(Player player, Enemy enemy) {
         this.setOpaque(false);
-        this.setPreferredSize(new Dimension(640, 150));
+        this.setPreferredSize(new Dimension(1280, 380));
 
         JPanel charactersPanel = new JPanel(new GridLayout(1, 2, 20, 10));
         charactersPanel.setOpaque(false);
@@ -31,6 +31,8 @@ public class ContainerCharacters extends JPanel {
 
         effectsManager = new EffectsManager();
         effectsPanel = new EffectsPanel(effectsManager);
+        effectsManager.bindTarget(player, frame);
+        effectsManager.bindTarget(enemy, frameEnemy);
         previousPlayerHealth = player.getHealth();
         previousEnemyHealth = enemy.getHealth();
 
@@ -53,12 +55,12 @@ public class ContainerCharacters extends JPanel {
     private void detectDamage(Player player, Enemy enemy) {
         if (player.getHealth() < previousPlayerHealth) {
             if (!effectsManager.consumeBloodSuppression()) {
-                addBloodEffect(getWidth() / 4);
+                addBloodEffect(player);
             }
         }
         if (enemy.getHealth() < previousEnemyHealth) {
             if (!effectsManager.consumeBloodSuppression()) {
-                addBloodEffect(getWidth() * 3 / 4);
+                addBloodEffect(enemy);
             }
         }
 
@@ -66,8 +68,8 @@ public class ContainerCharacters extends JPanel {
         previousEnemyHealth = enemy.getHealth();
     }
 
-    private void addBloodEffect(int centerX) {
-        effectsManager.playBlood(centerX, getHeight() / 2);
+    private void addBloodEffect(Object target) {
+        effectsManager.playBlood(target);
     }
 
     public void stopTimer() {

@@ -10,7 +10,7 @@ class PanelGameplay extends JPanel {
 
     public PanelGameplay(Player player, Enemy enemy, GameManager gameManager) {
         this.setBackground(Color.WHITE);
-        this.setPreferredSize(new Dimension(640, 300));
+        this.setPreferredSize(new Dimension(1280, 480));
         this.setLayout(new BorderLayout());
         containerText = new ContainerText(player, enemy);
         containerCharacters = new ContainerCharacters(player, enemy);
@@ -19,10 +19,11 @@ class PanelGameplay extends JPanel {
         //
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
-        container.setPreferredSize(new Dimension(640, 50));
+        container.setPreferredSize(new Dimension(1280, 100));
         container.setOpaque(false);
         LabelsComponents labelTurn = new LabelsComponents(
                 "Turno: " + (gameManager.isPlayerTurn() ? "Jugador" : "Enemigo"));
+        container.add(containerText, BorderLayout.SOUTH); 
         container.add(labelTurn, BorderLayout.CENTER);
 
         Timer timer = new Timer(100, e -> {
@@ -30,10 +31,9 @@ class PanelGameplay extends JPanel {
         });
         timer.start();
         //
-        BackgroundPanel backgroundPanel = new BackgroundPanel("midnight.png", 640, 300);
+        BackgroundPanel backgroundPanel = new BackgroundPanel("midnight.png", 1280, 480);
         backgroundPanel.setLayout(new BorderLayout());
         backgroundPanel.add(container, BorderLayout.NORTH);
-        backgroundPanel.add(containerText, BorderLayout.SOUTH); 
         backgroundPanel.add(containerCharacters, BorderLayout.CENTER);
 
         this.add(backgroundPanel, BorderLayout.CENTER);

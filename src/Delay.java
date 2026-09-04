@@ -51,7 +51,7 @@ public class Delay {
         if (player.getLastAction() != null && player.getLastAction().equals("attack") && !actionEnemy.equals("dodge")) {
             player.attack(enemy);
             if (!playDeathSlash(enemy, effectsManager)) {
-                effectsManager.playSlashPlayer(480, 75);
+                effectsManager.playSlashPlayer(enemy);
             }
             AudioManager.getInstance().playEffect("attack");
             return false;
@@ -88,7 +88,7 @@ public class Delay {
             effectsManager.suppressNextBlood();
             player.receiveDamage(player.getDamage() / 2);
             if (!playDeathSlash(player, effectsManager)) {
-                effectsManager.playDodgeFailed(120, 100);
+                effectsManager.playDodgeFailed(player);
             }
             AudioManager.getInstance().playEffect("attack");
         }
@@ -96,7 +96,6 @@ public class Delay {
 
     private static void dodgeEnemyAction(Enemy enemy, Player player,
             Inteligence intelligence, EffectsManager effectsManager) {
-        System.out.println("Player last action: " + player.getLastAction());
         if (intelligence.isDodgeAttack()) {
             player.setState(State.ATTACK);
             AudioManager.getInstance().playEffect("attack");
@@ -107,7 +106,7 @@ public class Delay {
             effectsManager.suppressNextBlood();
             enemy.receiveDamage(enemy.getDamage() / 2);
             if (!playDeathSlash(enemy, effectsManager)) {
-                effectsManager.playDodgeFailed(480, 100);
+                effectsManager.playDodgeFailed(enemy);
             }
             AudioManager.getInstance().playEffect("attack");
         }
@@ -121,7 +120,7 @@ public class Delay {
         if (actionEnemy.equals("attack")) {
             enemy.attack(player);
             if (!playDeathSlash(player, effectsManager)) {
-                effectsManager.playSlashEnemy(160, 75);
+                effectsManager.playSlashEnemy(player);
             }
             AudioManager.getInstance().playEffect("attack");
         } else if (actionEnemy.equals("heal")) {
@@ -130,7 +129,7 @@ public class Delay {
         } else {
             enemy.attack(player);
             if (!playDeathSlash(player, effectsManager)) {
-                effectsManager.playSlashEnemy(160, 75);
+                effectsManager.playSlashEnemy(player);
             }
             AudioManager.getInstance().playEffect("attack");
         }
@@ -142,9 +141,9 @@ public class Delay {
         }
 
         if (character instanceof Player) {
-            effectsManager.playSlashDeadEnemy(160, 75);
+            effectsManager.playSlashDeadPlayer(character);
         } else {
-            effectsManager.playSlashDeadPlayer(480, 75);
+            effectsManager.playSlashDeadEnemy(character);
         }
         return true;
     }

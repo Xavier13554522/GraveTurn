@@ -5,9 +5,11 @@ import javax.swing.*;
 class GameManager {
     private boolean playerTurn = true;
     private boolean gameOver = false;
+    private boolean gameOverScreenShown = false;
     private int turnCount = 0;
     private String winner;
     private CreateWindow createWindow;
+    private Runnable gameOverHandler;
     private int wins;
 
     public GameManager(CreateWindow createWindow) {
@@ -22,9 +24,14 @@ class GameManager {
         }
         this.playerTurn = true;
         this.gameOver = false;
+        this.gameOverScreenShown = false;
         this.turnCount = 0;
         this.winner = null;
         this.createWindow = createWindow;
+    }
+
+    public void setGameOverHandler(Runnable gameOverHandler) {
+        this.gameOverHandler = gameOverHandler;
     }
 
     public boolean isPlayerTurn() {
@@ -94,6 +101,7 @@ class GameManager {
     public void resetGame() {
         playerTurn = true;
         gameOver = false;
+        gameOverScreenShown = false;
         winner = null;
         turnCount = 0;
     }
@@ -103,10 +111,14 @@ class GameManager {
     }
 
     public void checkGameOver(Character winnerPlayer) {
-        if (gameOver) {
+        if (gameOver && !gameOverScreenShown) {
+            gameOverScreenShown = true;
             AudioManager.getInstance().playEffect("dead");
-            createWindow.setPanel(new PanelGameOver(createWindow, this, winnerPlayer, winner), "GameOver");
             Timer timer = new Timer(2000, e -> {
+                if (gameOverHandler != null) {
+                    gameOverHandler.run();
+                }
+                createWindow.setPanel(new PanelGameOver(createWindow, this, winnerPlayer, winner), "GameOver");
                 createWindow.showPanel("GameOver");
             });
             timer.setRepeats(false);

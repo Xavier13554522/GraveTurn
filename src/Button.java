@@ -87,10 +87,10 @@ public class Button extends JButton {
             return;
         }
 
-        BufferedImage renderedIcon = new BufferedImage(48, 48, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage renderedIcon = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = renderedIcon.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        graphics.drawImage(iconImage, 0, 0, 48, 48, null);
+        graphics.drawImage(iconImage, 0, 0, 64, 64, null);
         if (iconColor != null) {
             graphics.setComposite(AlphaComposite.SrcIn);
             graphics.setColor(iconColor);

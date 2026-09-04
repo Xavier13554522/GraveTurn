@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.*;
+import java.util.function.BooleanSupplier;
 import javax.swing.JPanel;
 
 public class ActionsContainer extends JPanel {
@@ -20,7 +21,7 @@ public class ActionsContainer extends JPanel {
         this.setOpaque(false);
         this.gameManager = gameManager;
         this.effectsManager = effectsManager;
-        BackgroundPanel bg = new BackgroundPanel("action-table.png", 640, 180);
+        BackgroundPanel bg = new BackgroundPanel("action-table.png", 1280, 240);
         bg.setLayout(new GridBagLayout());
         bg.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -28,32 +29,37 @@ public class ActionsContainer extends JPanel {
         attackButton = createActionButton(bg, gbc, 0, Paths.SelectSword("1.png"),
                 () -> {
                     player.setLastAction("attack");
-                }, null);
+            }, null, () -> true);
         dodgeButton = createActionButton(bg, gbc, 1, Paths.SelectDodge("1.png"), () -> player.setLastAction("dodge"),
-                () -> player.Dodge());
-        healButton = createActionButton(bg, gbc, 2, Paths.SelectPotion("1") + "3.png", () -> player.heal(), null);
+            () -> player.Dodge(), () -> true);
+        healButton = createActionButton(bg, gbc, 2, Paths.SelectPotion("1") + "3.png", () -> player.heal(), null,
+            player::canHeal);
         updateButtonsState();
         this.add(bg, BorderLayout.CENTER);
     }
 
     private Button createActionButton(BackgroundPanel bg, GridBagConstraints gbc, int gridx, String iconPath,
-            Runnable action, Runnable delayedAction) {
+            Runnable action, Runnable delayedAction, BooleanSupplier canExecute) {
         Button button = new Button(null, iconPath, null,80,80);
         button.setMouseEvent(
             () -> button.setIconColor(new Color(255, 215, 80)),
             () -> button.setIconColor(null));
-        button.addActionListener(e -> executePlayerAction(action, delayedAction));
+        button.addActionListener(e -> executePlayerAction(action, delayedAction, canExecute));
         gbc.gridx = gridx;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(8, 12, 0, 12);
+        gbc.insets = new Insets(20, 80, 0, 80);
         bg.add(button, gbc);
         return button;
     }
 
-    private void executePlayerAction(Runnable action, Runnable delayedAction) {
+    private void executePlayerAction(Runnable action, Runnable delayedAction, BooleanSupplier canExecute) {
         if (!gameManager.isPlayerTurn()) {
+            return;
+        }
+
+        if (!canExecute.getAsBoolean()) {
             return;
         }
 
@@ -70,7 +76,7 @@ public class ActionsContainer extends JPanel {
     private void updateButtonsState() {
         gameManager.checkWinner(player, enemy);
         boolean playerTurn = gameManager.isPlayerTurn();
-        boolean playersPotions = player.getPotion() > 0;
+        boolean playersPotions = player.canHeal();
         boolean isWinner = gameManager.getGameOver();
         attackButton.setEnabled(playerTurn && !isWinner);
         dodgeButton.setEnabled(playerTurn && !isWinner);

@@ -20,7 +20,7 @@ public class CreateWindow extends JFrame {
         loadConfig();
         this.setUndecorated(fullscreen);
         this.setIconImage(new ImageIcon(Paths.ASSETS + "ico.png").getImage());
-        this.setTitle("Grave Turn-based Game");
+        this.setTitle("Grave Turn");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(container);
@@ -70,7 +70,7 @@ public class CreateWindow extends JFrame {
             device.setFullScreenWindow(this);
 
             for (DisplayMode supportedMode : device.getDisplayModes()) {
-                if (supportedMode.getWidth() == 640 && supportedMode.getHeight() == 480) {
+                if (supportedMode.getWidth() == 1280 && supportedMode.getHeight() == 720) {
                     try {
                         device.setDisplayMode(supportedMode);
                     } catch (IllegalArgumentException exception) {

@@ -16,7 +16,7 @@ public class PanelInitialize extends JPanel {
         this.setLayout(new BorderLayout());
         AudioManager.getInstance().playBackgroundMusic("background");
         
-        BackgroundPanel bg = new BackgroundPanel("background.png", 640, 480);
+        BackgroundPanel bg = new BackgroundPanel("background.png", 1280, 720);
         bg.setLayout(new GridBagLayout());
         // Objeto para dar las instrucciones de posición
         GridBagConstraints gbc = new GridBagConstraints();
@@ -40,7 +40,7 @@ public class PanelInitialize extends JPanel {
         });
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 25, 0);
+        gbc.insets = new Insets(0, 0, 40, 0);
 
         bg.add(button, gbc);
 
@@ -52,7 +52,7 @@ public class PanelInitialize extends JPanel {
         });
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.insets = new Insets(0, 0, 25, 0);
+        gbc.insets = new Insets(0, 0, 40, 0);
         bg.add(buttonConfig, gbc);
 
         // 3. CONFIGURACIÓN DEL PANEL (Fila 2)
@@ -60,11 +60,7 @@ public class PanelInitialize extends JPanel {
         configureButtonStyle(buttonExit);
         buttonExit.addActionListener(e -> {
             buttonExit.setBackgroundImage(PRESSED_BUTTON);
-            int response = JOptionPane.showConfirmDialog(buttonExit, "¿Estás seguro de que quieres salir?",
-                    "Confirmar salida", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
+            System.exit(0);
         });
         gbc.gridx = 0;
         gbc.gridy = 3;

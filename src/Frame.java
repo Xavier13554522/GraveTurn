@@ -14,8 +14,8 @@ public class Frame extends JPanel {
         this.character = character;
 
         Image currentFrame = character.getCurrentFrame();
-        this.frameWidth = (currentFrame != null ? currentFrame.getWidth(null) : 0) * 2;
-        this.frameHeight = (currentFrame != null ? currentFrame.getHeight(null) : 0) * 2;
+        this.frameWidth = (currentFrame != null ? currentFrame.getWidth(null) : 0) * 3;
+        this.frameHeight = (currentFrame != null ? currentFrame.getHeight(null) : 0) * 3;
 
         this.setPreferredSize(new Dimension(Math.max(frameWidth, 1), Math.max(frameHeight, 1)));
         this.setOpaque(false);

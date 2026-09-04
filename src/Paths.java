@@ -10,6 +10,8 @@ public class Paths {
     //SPRITES
     public static final String PLAYER = SPRITES + "characters/";
     public static final String ENEMIES = SPRITES + "enemies/";
+    public static final String EFFECTS = SPRITES + "effects/";
+    public static final String UI = SPRITES + "ui/";
     //ITEMS
     public static final String POTIONS = ITEMS + "potions/";
     public static final String SHIELDS = ITEMS + "shields/";

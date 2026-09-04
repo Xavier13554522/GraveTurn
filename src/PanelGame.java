@@ -23,6 +23,7 @@ public class PanelGame extends JPanel {
                 GridBagConstraints gbc = new GridBagConstraints();
 
                 gameplay = new PanelGameplay(player, enemy, gameManager);
+                gameManager.setGameOverHandler(gameplay::stopTimers);
                 gbc.gridx = 0;
                 gbc.gridy = 0;
                 gbc.insets = new Insets(0, 0, 0, 0);

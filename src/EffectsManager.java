@@ -1,13 +1,17 @@
 package src;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class EffectsManager {
     private final List<EffectInstance> effects = new ArrayList<>();
+    private final Map<Object, Component> targets = new HashMap<>();
     private final Image[] bloodFrames = LoadedEffects.loadBloodFrames();
     private final Image[] dodgeFailedFrames = LoadedEffects.loadDodgeFrames();
     private final Image[] slashPlayerFrames = LoadedEffects.loadSlashsPlayerFrames();
@@ -16,8 +20,18 @@ public class EffectsManager {
     private final Image[] slashDeadEnemyFrames = LoadedEffects.loadSlashColor3Frames();
     private boolean suppressNextBlood;
 
-    public void playBlood(int centerX, int centerY) {
-        add(bloodFrames, centerX, centerY, 50, 2.0);
+    public void bindTarget(Object owner, Component target) {
+        if (owner != null && target != null) {
+            targets.put(owner, target);
+        }
+    }
+
+    private Component resolveTarget(Object owner) {
+        return targets.get(owner);
+    }
+
+    public void playBlood(Object owner) {
+        play(owner, bloodFrames, 50, 2.0, 0, 0);
     }
 
     public void suppressNextBlood() {
@@ -30,34 +44,43 @@ public class EffectsManager {
         return suppressed;
     }
 
-    public void playDodgeFailed(int centerX, int centerY) {
-        add(dodgeFailedFrames, centerX, centerY, 200, 3.0);
+    public void playDodgeFailed(Object owner) {
+        play(owner, dodgeFailedFrames, 200, 3.0, 0, 0);
     }
 
-    public void playSlashPlayer(int centerX, int centerY) {
-        add(slashPlayerFrames, centerX, centerY, 50, 2.0);
+    public void playSlashPlayer(Object owner) {
+        play(owner, slashPlayerFrames, 50, 2.0, 0, -50);
     }
 
-    public void playSlashEnemy(int centerX, int centerY) {
-        add(slashEnemyFrames, centerX, centerY, 50, 2.0);
+    public void playSlashEnemy(Object owner) {
+        play(owner, slashEnemyFrames, 50, 2.0, 0, -50);
     }
 
-    public void playSlashDeadPlayer(int centerX, int centerY) {
-        add(slashDeadPlayerFrames, centerX, centerY, 50, 3.0);
+    public void playSlashDeadPlayer(Object owner) {
+        play(owner, slashDeadPlayerFrames, 50, 3.0, 0, 0);
     }
 
-    public void playSlashDeadEnemy(int centerX, int centerY) {
-        add(slashDeadEnemyFrames, centerX, centerY, 50, 3.0);
+    public void playSlashDeadEnemy(Object owner) {
+        play(owner, slashDeadEnemyFrames, 50, 3.0, 0, 0);
     }
 
-    public void add(Image[] frames, int centerX, int centerY,
+    private void play(Object owner, Image[] frames, long frameDurationMillis, double scale,
+            int offsetX, int offsetY) {
+        Component target = resolveTarget(owner);
+        if (target == null) {
+            return;
+        }
+        add(frames, target, offsetX, offsetY, frameDurationMillis, scale);
+    }
+
+    public void add(Image[] frames, Component target, int offsetX, int offsetY,
             long frameDurationMillis, double scale) {
-        if (frames == null || frames.length == 0 || frames[0] == null) {
+        if (frames == null || frames.length == 0 || frames[0] == null || target == null) {
             return;
         }
 
         effects.add(new EffectInstance(
-                frames, centerX, centerY, frameDurationMillis, scale));
+                frames, target, offsetX, offsetY, frameDurationMillis, scale));
     }
 
     public void update(long deltaMillis) {
@@ -71,9 +94,9 @@ public class EffectsManager {
         }
     }
 
-    public void draw(Graphics2D graphics) {
+    public void draw(Graphics2D graphics, Component reference) {
         for (EffectInstance effect : effects) {
-            effect.draw(graphics);
+            effect.draw(graphics, reference);
         }
     }
 }

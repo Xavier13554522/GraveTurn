@@ -1,23 +1,28 @@
 package src;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
+import javax.swing.SwingUtilities;
 
 public class EffectInstance {
     private final Image[] frames;
-    private final int centerX;
-    private final int centerY;
+    private final Component target;
+    private final int offsetX;
+    private final int offsetY;
     private final int width;
     private final int height;
     private final long frameDurationMillis;
     private int frameIndex;
     private long elapsedMillis;
 
-    public EffectInstance(Image[] frames, int centerX, int centerY,
+    public EffectInstance(Image[] frames, Component target, int offsetX, int offsetY,
             long frameDurationMillis, double scale) {
         this.frames = frames;
-        this.centerX = centerX;
-        this.centerY = centerY;
+        this.target = target;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         this.frameDurationMillis = frameDurationMillis;
 
         int originalWidth = frames[0].getWidth(null);
@@ -35,12 +40,19 @@ public class EffectInstance {
         }
     }
 
-    public void draw(Graphics2D graphics) {
-        if (!isFinished()) {
-            int x = centerX - width / 2;
-            int y = centerY - height / 2;
-            graphics.drawImage(frames[frameIndex], x, y, width, height, null);
+    public void draw(Graphics2D graphics, Component reference) {
+        if (isFinished() || target == null || reference == null) {
+            return;
         }
+
+        Point point = SwingUtilities.convertPoint(target,
+                target.getWidth() / 2 + offsetX,
+                target.getHeight() / 2 + offsetY,
+                reference);
+
+        int x = point.x - width / 2;
+        int y = point.y - height / 2;
+        graphics.drawImage(frames[frameIndex], x, y, width, height, null);
     }
 
     public boolean isFinished() {

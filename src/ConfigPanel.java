@@ -27,13 +27,13 @@ public class ConfigPanel extends JPanel {
         masterVolumeField = new JSpinner(new SpinnerNumberModel(config.masterVolume, 0, 100, 1));
         musicVolumeField = new JSpinner(new SpinnerNumberModel(config.musicVolume, 0, 100, 1));
         effectsVolumeField = new JSpinner(new SpinnerNumberModel(config.effectsVolume, 0, 100, 1));
-        fullscreenCheckBox = new JCheckBox("Pantalla completa", config.fullscreen);
+        fullscreenCheckBox = new JCheckBox("Fullscreen", config.fullscreen);
 
-        BackgroundPanel bg = new BackgroundPanel("background.png", 640, 480);
+        BackgroundPanel bg = new BackgroundPanel("background.png", 1280, 720);
         bg.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        LabelsComponents title = new LabelsComponents("Configuración");
+        LabelsComponents title = new LabelsComponents("Config");
         title.setFont(new Font("Arial", Font.BOLD, 26));
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -61,11 +61,11 @@ public class ConfigPanel extends JPanel {
         buttonsPanel.setOpaque(false);
         buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 18, 0));
 
-        Button cancelButton = new Button("Cancelar", null, NORMAL_BUTTON, 170, 50);
+        Button cancelButton = new Button("Cancel", null, NORMAL_BUTTON, 170, 50);
         configureButtonStyle(cancelButton);
         cancelButton.addActionListener(e -> createWindow.showPanel("Home"));
 
-        Button acceptButton = new Button("Aceptar", null, NORMAL_BUTTON, 170, 50);
+        Button acceptButton = new Button("Accept", null, NORMAL_BUTTON, 170, 50);
         configureButtonStyle(acceptButton);
         acceptButton.addActionListener(e -> {
             acceptConfig(createWindow);
