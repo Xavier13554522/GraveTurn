@@ -14,7 +14,7 @@ public class PanelInitialize extends JPanel {
         BackgroundPanel bg = new BackgroundPanel("background.png", 1280, 720);
         bg.setLayout(new BorderLayout());
         containerPanel container = new containerPanel(createWindow);
-        JLabel versionLabel = new JLabel("Version: " + new ConfigData().version + " by Xavier Gómez");
+        JLabel versionLabel = new JLabel("v" + new ConfigData().version + "b by Xavier Gómez");
         versionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         versionLabel.setForeground(Color.WHITE);
         bg.add(container, BorderLayout.CENTER);
