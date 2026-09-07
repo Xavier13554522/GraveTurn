@@ -15,7 +15,6 @@ public class ConfigPanel extends JPanel {
     private static final String PRESSED_BUTTON = BUTTON_PATH + "press-button.png";
     private static final String ACTIVE_BUTTON = BUTTON_PATH + "active-button.png";
 
-    private final JSpinner masterVolumeField;
     private final JSpinner musicVolumeField;
     private final JSpinner effectsVolumeField;
     private final JCheckBox fullscreenCheckBox;
@@ -24,7 +23,6 @@ public class ConfigPanel extends JPanel {
         setLayout(new BorderLayout());
 
         ConfigData config = loadConfigData();
-        masterVolumeField = new JSpinner(new SpinnerNumberModel(config.masterVolume, 0, 100, 1));
         musicVolumeField = new JSpinner(new SpinnerNumberModel(config.musicVolume, 0, 100, 1));
         effectsVolumeField = new JSpinner(new SpinnerNumberModel(config.effectsVolume, 0, 100, 1));
         fullscreenCheckBox = new JCheckBox("Fullscreen", config.fullscreen);
@@ -40,21 +38,21 @@ public class ConfigPanel extends JPanel {
         gbc.insets = new Insets(20, 0, 18, 0);
         bg.add(title, gbc);
 
-        BackgroundPanel textBox = createTextBox(440, 210);
+        BackgroundPanel textBox = createTextBox(440, 230);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 18, 0);
         bg.add(textBox, gbc);
 
-        addInput(textBox, "Volumen principal", masterVolumeField, 0);
-        addInput(textBox, "Música", musicVolumeField, 1);
-        addInput(textBox, "Efectos", effectsVolumeField, 2);
+        addInput(textBox, "Music", musicVolumeField, 0);
+        addInput(textBox, "Effects", effectsVolumeField, 1);
 
         GridBagConstraints checkGbc = new GridBagConstraints();
         checkGbc.gridx = 0;
-        checkGbc.gridy = 3;
+        checkGbc.gridy = 2;
+        checkGbc.gridwidth = 2;
         checkGbc.anchor = GridBagConstraints.CENTER;
-        checkGbc.insets = new Insets(10, 0, 0, 0);
+        checkGbc.insets = new Insets(16, 0, 10, 0);
         textBox.add(fullscreenCheckBox, checkGbc);
 
         JPanel buttonsPanel = new JPanel();
@@ -127,7 +125,7 @@ public class ConfigPanel extends JPanel {
     private void acceptConfig(CreateWindow createWindow) {
         try {
             ConfigData config = new ConfigData();
-            config.masterVolume = getSpinnerValue(masterVolumeField, config.masterVolume);
+            config.masterVolume = 100;
             config.musicVolume = getSpinnerValue(musicVolumeField, config.musicVolume);
             config.effectsVolume = getSpinnerValue(effectsVolumeField, config.effectsVolume);
             config.fullscreen = fullscreenCheckBox.isSelected();

@@ -1,32 +1,43 @@
 package src;
 
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.*;
 
 public class PanelInitialize extends JPanel {
+    public PanelInitialize(CreateWindow createWindow) {
+        this.setBackground(Color.BLACK);
+        this.setLayout(new BorderLayout());
+        AudioManager.getInstance().playBackgroundMusic("background");
+
+        BackgroundPanel bg = new BackgroundPanel("background.png", 1280, 720);
+        bg.setLayout(new BorderLayout());
+        containerPanel container = new containerPanel(createWindow);
+        JLabel versionLabel = new JLabel("Version: " + new ConfigData().version + " by Xavier Gómez");
+        versionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        versionLabel.setForeground(Color.WHITE);
+        bg.add(container, BorderLayout.CENTER);
+        bg.add(versionLabel, BorderLayout.SOUTH);
+        this.add(bg, BorderLayout.CENTER);
+    }
+}
+
+class containerPanel extends JPanel {
     private static final String BUTTON_PATH = Paths.BACKGROUND + "buttons/1/";
     private static final String NORMAL_BUTTON = BUTTON_PATH + "button.png";
     private static final String PRESSED_BUTTON = BUTTON_PATH + "press-button.png";
     private static final String ACTIVE_BUTTON = BUTTON_PATH + "active-button.png";
 
-    public PanelInitialize(CreateWindow createWindow) {
-        this.setBackground(Color.BLACK);
-        this.setLayout(new BorderLayout());
-        AudioManager.getInstance().playBackgroundMusic("background");
-        
-        BackgroundPanel bg = new BackgroundPanel("background.png", 1280, 720);
-        bg.setLayout(new GridBagLayout());
-        // Objeto para dar las instrucciones de posición
-        GridBagConstraints gbc = new GridBagConstraints();
-
+    public containerPanel(CreateWindow createWindow) {
+        this.setLayout(new GridBagLayout());
         BackgroundPanel title = new BackgroundPanel("title.png", 550, 150);
         title.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 0, 0);
-        bg.add(title, gbc);
+        this.add(title, gbc);
 
         int btnwidth = 200;
         int btnheight = 60;
@@ -40,9 +51,9 @@ public class PanelInitialize extends JPanel {
         });
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 40, 0);
+        gbc.insets = new Insets(0, 0, 20, 0);
 
-        bg.add(button, gbc);
+        this.add(button, gbc);
 
         Button buttonConfig = new Button("Config", null, NORMAL_BUTTON, btnwidth, btnheight);
         configureButtonStyle(buttonConfig);
@@ -52,10 +63,20 @@ public class PanelInitialize extends JPanel {
         });
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.insets = new Insets(0, 0, 40, 0);
-        bg.add(buttonConfig, gbc);
+        gbc.insets = new Insets(0, 0, 20, 0);
+        this.add(buttonConfig, gbc);
 
-        // 3. CONFIGURACIÓN DEL PANEL (Fila 2)
+        Button buttonTutorial = new Button("Tutorial", null, NORMAL_BUTTON, btnwidth, btnheight);
+        configureButtonStyle(buttonTutorial);
+        buttonTutorial.addActionListener(e -> {
+            buttonTutorial.setBackgroundImage(PRESSED_BUTTON);
+            createWindow.showPanel("Tutorial");
+        });
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.insets = new Insets(0, 0, 20, 0);
+        this.add(buttonTutorial, gbc);
+
         Button buttonExit = new Button("Exit", null, NORMAL_BUTTON, btnwidth, btnheight);
         configureButtonStyle(buttonExit);
         buttonExit.addActionListener(e -> {
@@ -63,11 +84,11 @@ public class PanelInitialize extends JPanel {
             System.exit(0);
         });
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.insets = new Insets(0, 0, 0, 0);
 
-        bg.add(buttonExit, gbc);
-        this.add(bg, BorderLayout.CENTER);
+        this.add(buttonExit, gbc);
+        this.setOpaque(false);
     }
 
     private void configureButtonStyle(Button button) {

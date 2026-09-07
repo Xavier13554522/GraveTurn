@@ -2,6 +2,7 @@ package src;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -14,20 +15,32 @@ public class BackgroundPanel extends JPanel {
     private int heightBg;
 
     public BackgroundPanel(String bg, Integer widthBg, Integer heightBg) {
+        this.setOpaque(true);
+        this.setBackground(Color.BLACK);
+
         try {
             String imagePath = bg;
             if (!bg.contains("/") && !bg.contains("\\")) {
                 imagePath = Paths.SelectBackground(bg);
             }
-            background = ImageIO.read(new File(imagePath));
+
+            File imageFile = new File(imagePath);
+            if (!imageFile.exists()) {
+                imageFile = new File(System.getProperty("user.dir"), imagePath);
+            }
+            if (!imageFile.exists()) {
+                imageFile = new File(System.getProperty("user.dir"), "assets/" + bg);
+            }
+
+            background = ImageIO.read(imageFile);
             this.widthBg = widthBg != null ? widthBg : background.getWidth();
             this.heightBg = heightBg != null ? heightBg : background.getHeight();
             setPreferredSize(new Dimension(this.widthBg, this.heightBg));
-            setOpaque(false);
         } catch (IOException e) {
             e.printStackTrace();
             this.widthBg = widthBg != null ? widthBg : 0;
             this.heightBg = heightBg != null ? heightBg : 0;
+            setPreferredSize(new Dimension(this.widthBg, this.heightBg));
         }
     }
 
@@ -36,6 +49,9 @@ public class BackgroundPanel extends JPanel {
         super.paintComponent(g);
         if (background != null) {
             g.drawImage(background, 0, 0, widthBg, heightBg, this);
+        } else {
+            g.setColor(getBackground());
+            g.fillRect(0, 0, getWidth(), getHeight());
         }
     }
 }

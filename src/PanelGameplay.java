@@ -22,12 +22,12 @@ class PanelGameplay extends JPanel {
         container.setPreferredSize(new Dimension(1280, 100));
         container.setOpaque(false);
         LabelsComponents labelTurn = new LabelsComponents(
-                "Turno: " + (gameManager.isPlayerTurn() ? "Jugador" : "Enemigo"));
+                "Turn: " + (gameManager.isPlayerTurn() ? "Player" : "Enemy"));
         container.add(containerText, BorderLayout.SOUTH); 
         container.add(labelTurn, BorderLayout.CENTER);
 
         Timer timer = new Timer(100, e -> {
-            labelTurn.setText("Turno: " + (gameManager.isPlayerTurn() ? "Jugador" : "Enemigo"));
+            labelTurn.setText("Turn: " + (gameManager.isPlayerTurn() ? "Player" : "Enemy"));
         });
         timer.start();
         //

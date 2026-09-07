@@ -32,11 +32,11 @@ public class PanelGameOver extends JPanel {
         addText(statsBox, statsTitle, 0, 5);
 
         addText(statsBox, new LabelsComponents("Total turns: " + gameManager.getTurnCount()), 1, 0);
-        addText(statsBox, new LabelsComponents("accDamage: " + winner.getAccDamage()), 2, 0);
-        addText(statsBox, new LabelsComponents("accPotion: " + winner.getAccPotion()), 3, 0);
-        addText(statsBox, new LabelsComponents("accDodge: " + winner.getAccDodge()), 4, 0);
-        addText(statsBox, new LabelsComponents("accReceiveDamage: " + winner.getAccReceiveDamage()), 5, 0);
-        addText(statsBox, new LabelsComponents("Health left: " + winner.getHealth()), 6, 0);
+        addText(statsBox, new LabelsComponents("Damage dealt: " + winner.getAccDamage()), 2, 0);
+        addText(statsBox, new LabelsComponents("Potions used: " + winner.getAccPotion()), 3, 0);
+        addText(statsBox, new LabelsComponents("Dodges used: " + winner.getAccDodge()), 4, 0);
+        addText(statsBox, new LabelsComponents("Damage received: " + winner.getAccReceiveDamage()), 5, 0);
+        addText(statsBox, new LabelsComponents("Health remaining: " + winner.getHealth()), 6, 0);
         addToBackground(bg, statsBox, 0, 1, 1, new Insets(0, 60, 8, 20), 0.4);
 
         winnerAnimationTimer = new Timer(100, e -> {

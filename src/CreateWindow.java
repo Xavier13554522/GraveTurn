@@ -54,8 +54,9 @@ public class CreateWindow extends JFrame {
             ConfigData config = ConfigManager.load();
             fullscreen = config.fullscreen;
             AudioManager audioManager = AudioManager.getInstance();
-            audioManager.setMusicVolume(config.musicVolume / 100.0f);
-            audioManager.setEffectsVolume(config.effectsVolume / 100.0f);
+            float masterFactor = config.masterVolume / 100.0f;
+            audioManager.setMusicVolume(masterFactor * (config.musicVolume / 100.0f));
+            audioManager.setEffectsVolume(masterFactor * (config.effectsVolume / 100.0f));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,6 +112,10 @@ public class CreateWindow extends JFrame {
                 ConfigPanel panel = new ConfigPanel(this);
                 panels.put("Config", panel);
                 container.add(panel, "Config");
+            } else if (name.equals("Tutorial")) {
+                PanelTutorial panel = new PanelTutorial(this);
+                panels.put("Tutorial", panel);
+                container.add(panel, "Tutorial");
             }
         } else if (name.equals("Home")) {
             AudioManager.getInstance().playBackgroundMusic("background");

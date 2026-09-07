@@ -10,16 +10,15 @@ class GameManager {
     private String winner;
     private CreateWindow createWindow;
     private Runnable gameOverHandler;
-    private int wins;
+    private int wins = 1;
 
     public GameManager(CreateWindow createWindow) {
         try {
             SaveData saveData = SaveManager.load();
-            if(!saveData.equals(null)){
+            if (saveData != null) {
                 this.wins = saveData.wins;
             }
         } catch (Exception e) {
-            this.wins = 1;
             e.printStackTrace();
         }
         this.playerTurn = true;
@@ -71,11 +70,11 @@ class GameManager {
                 saveData.enemyPotion = 3;
             }
 
+            saveData.wins = wins;
             saveData.playerHealth *= saveData.wins;
             saveData.playerDamage *= saveData.wins;
             saveData.enemyHealth *= saveData.wins;
             saveData.enemyDamage *= saveData.wins;
-            saveData.wins = wins;
             SaveManager.save(saveData);
         } catch (Exception e) {
             e.printStackTrace();
